@@ -1,0 +1,204 @@
+@use 'sass:map';
+@use 'variables' as *;
+
+@mixin media($breakpoint) {
+  @media screen and (min-width: map.get($breakpoints, $breakpoint)) {
+    @content;
+  }
+}
+
+@mixin media-max($breakpoint) {
+  @media screen and (max-width: map.get($breakpoints, $breakpoint) - 1) {
+    @content;
+  }
+}
+
+@mixin visually-hidden {
+  position: absolute !important;
+  display: initial;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+  clip: rect(1px, 1px, 1px, 1px);
+}
+
+@mixin container {
+  width: 100%;
+  max-width: calc(1160px + 40px * 2);
+  margin: 0 auto;
+  padding-right: $side-indent-sm;
+  padding-left: $side-indent-sm;
+
+  @include media(lg) {
+    padding-right: $side-indent;
+    padding-left: $side-indent;
+  }
+}
+
+@mixin H1 {
+  font-weight: 700;
+  font-size: 38px;
+  line-height: 122%;
+
+  @include media(sm) {
+    font-size: 48px;
+  }
+
+  @include media(md) {
+    font-size: 56px;
+  }
+
+  @include media(lg) {
+    font-size: 72px;
+  }
+}
+
+@mixin H2 {
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 125%;
+
+  @include media(sm) {
+    font-size: 48px;
+  }
+
+  @include media(md) {
+    font-size: 64px;
+  }
+}
+
+@mixin H3 {
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 125%;
+
+  @include media(sm) {
+    font-size: 48px;
+  }
+}
+
+@mixin H4 {
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 131%;
+
+  @include media(sm) {
+    font-size: 32px;
+  }
+}
+
+@mixin H5 {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 125%;
+
+  @include media(sm) {
+    font-size: 24px;
+  }
+}
+
+@mixin H6 {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 140%;
+
+  @include media(sm) {
+    font-size: 20px;
+  }
+}
+
+@mixin H7 {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 150%;
+}
+
+@mixin body-big {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 133%;
+
+  @include media(sm) {
+    font-size: 24px;
+  }
+}
+
+@mixin body-regular {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 140%;
+
+  @include media(sm) {
+    font-size: 20px;
+  }
+}
+
+@mixin body-small {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
+
+  @include media(sm) {
+    font-size: 16px;
+  }
+}
+
+@mixin subtitle-medium {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 129%;
+
+  @include media(sm) {
+    font-size: 14px;
+  }
+}
+
+@mixin caption-regular {
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 133%;
+
+  @include media(sm) {
+    font-size: 12px;
+  }
+}
+
+@mixin caption-small {
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 140%;
+}
+
+@mixin CAPS {
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+@mixin card {
+  overflow: hidden;
+  background: $purple-light;
+  border-radius: 20px;
+}
+
+@mixin card-blur {
+  background: $white;
+  box-shadow: 0 8px 40px rgb(0 0 0 / 12%);
+}
+
+@mixin background-image($image, $color: $black, $opacity: 0.6) {
+  position: relative;
+  background: $image center no-repeat;
+  background-size: cover;
+
+  &::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba($color, $opacity);
+    border-radius: inherit;
+    content: '';
+  }
+}
