@@ -9,10 +9,12 @@
 <script setup>
 import { useCitiesStore } from '~/stores/city';
 import { useAuthStore } from '~/stores/auth';
+import { useUserStore } from '~/stores/user';
 const { $apiClient } = useNuxtApp();
 
 const cityStore = useCitiesStore();
 const authStore = useAuthStore();
+const userStore = useUserStore();
 
 const data = ref(null);
 const loading = ref(true);
@@ -29,6 +31,7 @@ onMounted(async () => {
     //Пример запроса, для которого нужна авторизация
     // const response = await $apiClient.get('/roles/my');
 
+    userStore.fetchUsers()
 
   } catch (err) {
     error.value = err.message;
@@ -41,6 +44,8 @@ const testMiddleware = async() => {
   const response = await $apiClient.get('/roles/my');
   console.log(response)
 }
+
+
 </script>
 
 <style lang="scss" scoped>
