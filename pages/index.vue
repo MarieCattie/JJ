@@ -1,7 +1,8 @@
 <template>
     <div>
-      <button @click="authStore.signIn('testtest@mail.ru', 'testtest')">Верная авторизация</button>
-      <button @click="authStore.logout()">Выход</button>
+      <button @click="authStore.signIn('testtest@mail.ru', 'testtest')">Верная авторизация (/auth/local/signIn)</button>
+      <button @click="authStore.logout()">Выход (/logout)</button>
+      <button @click="authStore.refresh()">Выход (/logout)</button>
       <button @click="testMiddleware">Тестовое получение данных под авторизацией</button>
     </div>
 </template>
