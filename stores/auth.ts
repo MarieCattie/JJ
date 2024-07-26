@@ -39,6 +39,18 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  async function signUp(email: string, password: string, cityUuid: string) {
+    try {
+      const api = useApi();
+      const data = await api.auth.signUp(email, password, cityUuid);
+      token.value = data.access_token;
+      refreshToken.value = data.refresh_token;
+    } catch (error) {
+      console.error('Error signing up', error);
+      throw error;
+    }
+  }
+
   async function logout() {
     try {
       const api = useApi();
@@ -55,6 +67,7 @@ export const useAuthStore = defineStore('auth', () => {
     token,
     refresh,
     signIn,
+    signUp,
     refreshToken,
     logout
   }

@@ -70,7 +70,7 @@ interface User {
 interface UserResponse extends Array<User> {}
 
 export default ($apiClient: AxiosInstance) => ({
-    async getUsers(page?: number, row?: number, byDate?: string, sortByUpdatedAt?: string, sortByCreatedAt?: string): Promise<UserResponse> {
+    async getAllUsers(page?: number, row?: number, byDate?: string, sortByUpdatedAt?: string, sortByCreatedAt?: string): Promise<UserResponse> {
         const params = {
             page,
             row,
