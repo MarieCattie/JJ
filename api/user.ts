@@ -81,5 +81,39 @@ export default ($apiClient: AxiosInstance) => ({
 
         const response = await $apiClient.get<UserResponse>('/users', { params });
         return response.data;
+    },
+
+    async getUserByToken(): Promise<User> {
+        const response = await $apiClient.get<any>('/users/my');
+        return response.data;
+    },
+
+    async getUserByEmail(email: string): Promise<User> {
+        const response = await $apiClient.get<User>(`/users/email/${email}`);
+        return response.data;
+    },
+
+    async getUserById(uuid: string): Promise<User> {
+        const response = await $apiClient.get<User>(`/users/${uuid}`);
+        return response.data;
+    },
+
+    async uploadUserImage(formData: FormData): Promise<void> {
+        const response = await $apiClient.post('/users/uploadImage', formData, {
+            headers: {
+                ...$apiClient.defaults.headers,
+                "Content-Type": "multipart/form-data",
+            }
+        });
+        return response.data;
+    },
+
+    async changePassword(previous_password: string, new_password: string): Promise<User> {
+        const response = await $apiClient.post<User>('/users/changePassword', {
+            previous_password,
+            new_password
+        });
+        return response.data;
     }
+    
 });

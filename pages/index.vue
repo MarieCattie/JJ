@@ -32,7 +32,6 @@ onMounted(async () => {
     //Пример запроса, для которого нужна авторизация
     // const response = await $apiClient.get('/roles/my');
 
-    userStore.fetchUsers()
 
   } catch (err) {
     error.value = err.message;
