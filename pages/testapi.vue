@@ -2,7 +2,7 @@
   <div>
     <h1 style="font-size: 35px;font-weight:bold;">Authorization</h1>
     <div class="wrapper">
-      <button @click="authStore.signIn('testtest@mail.ru', 'testtest')">Верная авторизация (/auth/local/signin)</button>
+      <button @click="authStore.signIn('moder@bk.ru', '54321')">Верная авторизация (/auth/local/signin)</button>
       <button @click="authStore.signUp('apitestuser@mail.ru', 'apitestuser', '74a7174b-19d1-41fd-a897-6d65853fd257')">Регистрация (/auth/local/signup)</button>
       <button @click="authStore.refresh()">Рефреш (auth/refresh)</button>
       <button @click="authStore.logout()">Выход (auth/logout)</button>
@@ -27,7 +27,7 @@
     </div>
     <h2 style="font-size: 20px;font-weight:bold;">GET /users/{uuid}</h2>
     <div class="wrapper">
-      <button @click="userStore.getUserById('78dce235-cc1a-48ca-89d7-0faf47e7d867')">GetById "78dce235-cc1a-48ca-89d7-0faf47e7d867"</button>
+      <button @click="userStore.getUserById('0af64411-ab92-4641-afcc-fcb40f8e9119')">GetById "0af64411-ab92-4641-afcc-fcb40f8e9119" (которого баним и разбаним)</button>
     </div>
     <h2 style="font-size: 20px;font-weight:bold;">POST /users/uploadImage</h2>
     <div class="wrapper">
@@ -41,25 +41,61 @@
         <button type="submit">Change Password</button>
       </form>
     </div>
+    <h2 style="font-size: 20px;font-weight:bold;">POST /users/changeEmail</h2>
+    <div class="wrapper">
+      <form @submit.prevent="handleChangeEmail">
+        <input type="email" v-model="newEmail" placeholder="New Email" required>
+        <input type="password" v-model="password" placeholder="Current Password" required>
+        <button type="submit">Change Email</button>
+      </form>
+    </div>
+    <h2 style="font-size: 20px;font-weight:bold;">POST /users/ban</h2>
+    <div class="wrapper">
+     <button @click="handleBanUser">Ban </button>
+     <button @click="handleUnBanUser">Unban </button>
+     <button @click="handleDeleteUser">Delete </button>
+    </div>
+  </div>
+  <h1 style="font-size: 35px;font-weight:bold;">Cities</h1>
+  <h2 style="font-size: 20px;font-weight:bold;">GET /cities/all</h2>
+  <div class="wrapper">
+    <button @click="cityStore.fetchCities">Fetch All Cities </button>
+    <button @click="cityStore.getCityByName('Смоленск')">Get City By Name</button>
+    <button @click="cityStore.getCityByUuid('74a7174b-19d1-41fd-a897-6d65853fd257')">Get City By UUID</button>
+  </div>
+  <h1 style="font-size: 35px;font-weight:bold;">Roles</h1>
+  <h2 style="font-size: 20px;font-weight:bold;">GET /roles/user/{uuid}</h2>
+  <div class="wrapper">
+    <button @click="roleStore.getRolesByUserUuid('027038ad-0222-48e9-b30e-80236528fd1b')">Get User Role </button>
   </div>
 </template>
 
 <script setup>
-import { useCitiesStore } from '~/stores/city';
 import { useAuthStore } from '~/stores/auth';
 import { useUserStore } from '~/stores/user';
+import { useCityStore } from '~/stores/city';
+import { useRoleStore } from '~/stores/roles';
 const { $apiClient } = useNuxtApp();
 
-const cityStore = useCitiesStore();
 const authStore = useAuthStore();
 const userStore = useUserStore();
+const cityStore = useCityStore();
+const roleStore = useRoleStore();
 
 const data = ref(null);
 const loading = ref(true);
 const error = ref(null);
 
+//Для метода смены пароля
 const previousPassword = ref('');
 const newPassword = ref('');
+
+//Для метода смены e-mail
+const newEmail = ref('');
+const password = ref('');
+
+//Для бана
+const userUuid = ref('0af64411-ab92-4641-afcc-fcb40f8e9119');
 
 onMounted(async () => {
   try {
@@ -99,6 +135,46 @@ const handleChangePassword = async () => {
     alert('Password changed successfully');
   } catch (error) {
     alert('Failed to change password');
+    console.error(error);
+  }
+};
+
+const handleChangeEmail = async () => {
+  try {
+    await userStore.changeEmail(newEmail.value, password.value);
+    alert('Email changed successfully');
+  } catch (error) {
+    alert('Failed to change email');
+    console.error(error);
+  }
+};
+
+const handleBanUser = async () => {
+  try {
+    await userStore.banUser(userUuid.value);
+    alert('User banned successfully');
+  } catch (error) {
+    alert('Failed to ban user');
+    console.error(error);
+  }
+};
+
+const handleUnBanUser = async () => {
+  try {
+    await userStore.unbanUser(userUuid.value);
+    alert('User unbanned successfully');
+  } catch (error) {
+    alert('Failed to ban user');
+    console.error(error);
+  }
+};
+
+const handleDeleteUser = async () => {
+  try {
+    await userStore.deleteUser(userUuid.value);
+    alert('User deleted successfully');
+  } catch (error) {
+    alert('Failed to delete user');
     console.error(error);
   }
 };

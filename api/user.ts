@@ -114,6 +114,32 @@ export default ($apiClient: AxiosInstance) => ({
             new_password
         });
         return response.data;
+    },
+
+    async changeEmail(email: string, password: string): Promise<User> {
+        const response = await $apiClient.post<User>('/users/changeEmail', {
+            email,
+            password
+        });
+        return response.data;
+    },
+
+    async banUser(uuid: string): Promise<void> {
+        await $apiClient.post<void>('/users/ban', {
+            uuid
+        });
+    },
+
+    async unbanUser(uuid: string): Promise<void> {
+        await $apiClient.post<void>('/users/unban', {
+            uuid
+        });
+    },
+
+    async deleteUser(uuid: string): Promise<void> {
+        await $apiClient.delete<void>('/users/delete', {
+            data: { uuid }
+        });
     }
     
 });

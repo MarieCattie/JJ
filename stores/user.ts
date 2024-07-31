@@ -110,6 +110,53 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
+    async function changeEmail(email: string, password: string) {
+        try {
+            const api = useApi();
+            const user = await api.user.changeEmail(email, password);
+            currentUser.value = user;
+            console.log('Email changed successfully:', user);
+        } catch (error) {
+            console.error('Error changing email:', error);
+        }
+    }
+
+    async function banUser(uuid: string) {
+        try {
+            const api = useApi();
+            await api.user.banUser(uuid);
+            console.log('User banned successfully');
+            // Обновление списка пользователей после бана
+            await fetchUsers();
+        } catch (error) {
+            console.error('Error banning user:', error);
+        }
+    }
+
+    async function unbanUser(uuid: string) {
+        try {
+            const api = useApi();
+            await api.user.unbanUser(uuid);
+            console.log('User unbanned successfully');
+            // Обновление списка пользователей после разбана
+            await fetchUsers();
+        } catch (error) {
+            console.error('Error unbanning user:', error);
+        }
+    }
+
+    async function deleteUser(uuid: string) {
+        try {
+            const api = useApi();
+            await api.user.deleteUser(uuid);
+            console.log('User deleted successfully');
+            // Обновление списка пользователей после удаления
+            await fetchUsers();
+        } catch (error) {
+            console.error('Error deleting user:', error);
+        }
+    }
+
     return {
         users,
         currentUser,
@@ -120,7 +167,11 @@ export const useUserStore = defineStore('user', () => {
         getUserByEmail,
         getUserById,
         uploadUserImage,
-        changePassword
+        changePassword,
+        changeEmail,
+        banUser,
+        unbanUser,
+        deleteUser
     };
 }, {
     persist: {

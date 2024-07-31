@@ -2,6 +2,8 @@ import { defineNuxtPlugin } from '#app';
 import authApi from '~/api/auth';
 import userApi from `~/api/user`;
 import storageApi from `~/api/storage`;
+import citiesApi from `~/api/cities`;
+import rolesApi from `~/api/roles`;
 
 export default defineNuxtPlugin((nuxtApp) => {
   const { $apiClient } = nuxtApp;
@@ -9,8 +11,9 @@ export default defineNuxtPlugin((nuxtApp) => {
   const api = {
     auth: authApi($apiClient),
     user: userApi($apiClient),
-    storage: storageApi($apiClient)
-
+    storage: storageApi($apiClient),
+    city: citiesApi($apiClient),
+    roles: rolesApi($apiClient)
   };
 
   nuxtApp.provide('api', api);
