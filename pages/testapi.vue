@@ -8,6 +8,7 @@
       <button @click="authStore.logout()">Выход (auth/logout)</button>
       <button @click="testMiddleware">Тестовое получение данных под авторизацией</button>
     </div>
+  
     <h1 style="font-size: 35px;font-weight:bold;">Users</h1>
     <h2 style="font-size: 20px;font-weight:bold;">GET /users</h2>
     <div class="wrapper">
@@ -66,20 +67,21 @@
   <h1 style="font-size: 35px;font-weight:bold;">Roles</h1>
   <h2 style="font-size: 20px;font-weight:bold;">GET /roles/user/{uuid}</h2>
   <div class="wrapper">
-    <button @click="roleStore.getRolesByUserUuid('027038ad-0222-48e9-b30e-80236528fd1b')">Get User Role </button>
+    <button @click="roleStore.getRolesByUserUuid('027038ad-0222-48e9-b30e-80236528fd1b')">Get User Role By Uuid </button>
+    <button @click="roleStore.fetchRolesForCurrentUser">Fetch roles authorized user (roles/my GET)</button>
   </div>
 </template>
 
 <script setup>
 import { useAuthStore } from '~/stores/auth';
 import { useUserStore } from '~/stores/user';
-import { useCityStore } from '~/stores/city';
+import { useCitiesStore } from '~/stores/city';
 import { useRoleStore } from '~/stores/roles';
 const { $apiClient } = useNuxtApp();
 
 const authStore = useAuthStore();
 const userStore = useUserStore();
-const cityStore = useCityStore();
+const cityStore = useCitiesStore();
 const roleStore = useRoleStore();
 
 const data = ref(null);
@@ -190,7 +192,7 @@ const handleDeleteUser = async () => {
     color: #040209;
     padding: 5px 15px;
     border-radius: 8px;
-    background: #e9dbff;
+    background: #00CA89;
   }
 }
 </style>

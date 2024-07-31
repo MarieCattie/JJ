@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { useApi } from "~/composables/api";
 import { City } from "~/api/cities";
 
-export const useCityStore = defineStore('city', () => {
+export const useCitiesStore = defineStore('city', () => {
     const cities = ref<City[]>([]);
     const loading = ref(false);
     const error = ref<string | null>(null);
