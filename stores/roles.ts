@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { useApi } from "~/composables/api";
-import { Role, Applicant, UpdateApplicantPayload } from "~/api/roles";
+import { Role, Applicant, UpdateApplicantPayload, Individual, UpdateIndividualPayload, LegalEntity, UpdateLegalEntityPayload, Moderator, UpdateModeratorPayload, ChangeUserRolePayload, UserRoleResponse      } from "~/api/roles";
 
 export const useRoleStore = defineStore('roles', () => {
   const rolesByCurrentUser = ref<Role[]>([]);
@@ -87,6 +87,122 @@ export const useRoleStore = defineStore('roles', () => {
     }
   }
 
+  async function getIndividualByUuid(uuid: string): Promise<Individual> {
+    loading.value = true;
+    error.value = null;
+    try {
+      const api = useApi();
+      const data = await api.roles.getIndividualByUuid(uuid);
+      return data;
+    } catch (err) {
+      error.value = 'Failed to get individual by UUID';
+      console.error('Error getting individual by UUID', err);
+      return null;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  async function updateIndividualByUuid(uuid: string, payload: UpdateIndividualPayload): Promise<Individual> {
+    loading.value = true;
+    error.value = null;
+    try {
+      const api = useApi();
+      const data = await api.roles.updateIndividualByUuid(uuid, payload);
+      return data;
+    } catch (err) {
+      error.value = 'Failed to update individual by UUID';
+      console.error('Error updating individual by UUID', err);
+      return null;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+
+  async function getLegalEntityByUuid(uuid: string): Promise<LegalEntity> {
+    loading.value = true;
+    error.value = null;
+    try {
+      const api = useApi();
+      const data = await api.roles.getLegalEntityByUuid(uuid);
+      return data;
+    } catch (err) {
+      error.value = 'Failed to get legal entity by UUID';
+      console.error('Error getting legal entity by UUID', err);
+      return null;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  async function updateLegalEntityByUuid(uuid: string, payload: UpdateLegalEntityPayload): Promise<LegalEntity> {
+    loading.value = true;
+    error.value = null;
+    try {
+      const api = useApi();
+      const data = await api.roles.updateLegalEntityByUuid(uuid, payload);
+      return data;
+    } catch (err) {
+      error.value = 'Failed to update legal entity by UUID';
+      console.error('Error updating legal entity by UUID', err);
+      return null;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  async function getModeratorByUuid(uuid: string): Promise<Moderator> {
+    loading.value = true;
+    error.value = null;
+    try {
+      const api = useApi();
+      const data = await api.roles.getModeratorByUuid(uuid);
+      return data;
+    } catch (err) {
+      error.value = 'Failed to get moderator by UUID';
+      console.error('Error getting moderator by UUID', err);
+      return null;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  async function updateModeratorByUuid(uuid: string, payload: UpdateModeratorPayload): Promise<Moderator> {
+    loading.value = true;
+    error.value = null;
+    try {
+      const api = useApi();
+      const data = await api.roles.updateModeratorByUuid(uuid, payload);
+      return data;
+    } catch (err) {
+      error.value = 'Failed to update moderator by UUID';
+      console.error('Error updating moderator by UUID', err);
+      return null;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  async function changeCurrentUserRole(payload: ChangeUserRolePayload): Promise<UserRoleResponse> {
+    loading.value = true;
+    error.value = null;
+    try {
+      const api = useApi();
+      const data = await api.roles.changeCurrentUserRole(payload);
+      await fetchRolesForCurrentUser();
+      return data;
+    } catch (err) {
+      error.value = 'Failed to change user role';
+      console.error('Error changing user role', err);
+      return null;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  
+
   return {
     role,
     rolesByCurrentUser,
@@ -96,7 +212,14 @@ export const useRoleStore = defineStore('roles', () => {
     fetchRolesForCurrentUser,
     searchApplicantByFullName,
     getApplicantByUuid,
-    updateApplicantByUuid
+    updateApplicantByUuid,
+    getIndividualByUuid,
+    updateIndividualByUuid,
+    getLegalEntityByUuid,
+    updateLegalEntityByUuid,
+    getModeratorByUuid,
+    updateModeratorByUuid,
+    changeCurrentUserRole
   };
 }, {
   persist: true

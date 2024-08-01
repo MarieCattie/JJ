@@ -3,7 +3,7 @@ import { AxiosInstance } from "axios";
 export interface City {
     uuid: string;
     title: string;
-  }
+}
 
 export default ($apiClient: AxiosInstance) => ({
     async getAllCities(): Promise<City[]> {

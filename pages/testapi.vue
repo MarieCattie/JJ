@@ -2,7 +2,8 @@
   <div>
     <h1 style="font-size: 35px;font-weight:bold;">Authorization</h1>
     <div class="wrapper">
-      <button @click="authStore.signIn('moder@bk.ru', '54321')">Верная авторизация (/auth/local/signin)</button>
+      <button @click="authStore.signIn('moder@bk.ru', '54321')">авторизация модера (/auth/local/signin)</button>
+      <button @click="authStore.signIn('testtest@mail.ru', 'testtest')">Верная авторизация (/auth/local/signin)</button>
       <button @click="authStore.signUp('apitestuser@mail.ru', 'apitestuser', '74a7174b-19d1-41fd-a897-6d65853fd257')">Регистрация (/auth/local/signup)</button>
       <button @click="authStore.refresh()">Рефреш (auth/refresh)</button>
       <button @click="authStore.logout()">Выход (auth/logout)</button>
@@ -69,6 +70,15 @@
   <div class="wrapper">
     <button @click="roleStore.getRolesByUserUuid('027038ad-0222-48e9-b30e-80236528fd1b')">Get User Role By Uuid </button>
     <button @click="roleStore.fetchRolesForCurrentUser">Fetch roles authorized user (roles/my GET)</button>
+    <button @click="roleStore.changeCurrentUserRole({ role: 'individual' })">Change role</button>
+  </div>
+  <h1 style="font-size: 35px;font-weight:bold;">Competencies</h1>
+  <h2 style="font-size: 20px;font-weight:bold;">GET all competencies</h2>
+  <div class="wrapper">
+    <button @click="competenciesStore.fetchCompetencies()">All competencies </button>
+    <button @click="competenciesStore.getCompetencyByName('Python')">Get By Name 'Python'</button>
+    <button @click="competenciesStore.storeCompetency('Программирование')">Создание</button>
+    <button @click="competenciesStore.deleteCompetency('5f15f5ba-4111-46dc-8f92-77b2ac33846d')">Удаление по ид</button>
   </div>
 </template>
 
@@ -77,12 +87,14 @@ import { useAuthStore } from '~/stores/auth';
 import { useUserStore } from '~/stores/user';
 import { useCitiesStore } from '~/stores/city';
 import { useRoleStore } from '~/stores/roles';
+import { useCompetenciesStore } from '~/stores/competencies';
 const { $apiClient } = useNuxtApp();
 
 const authStore = useAuthStore();
 const userStore = useUserStore();
 const cityStore = useCitiesStore();
 const roleStore = useRoleStore();
+const competenciesStore = useCompetenciesStore();
 
 const data = ref(null);
 const loading = ref(true);
