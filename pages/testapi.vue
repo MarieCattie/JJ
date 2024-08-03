@@ -80,6 +80,17 @@
     <button @click="competenciesStore.storeCompetency('Программирование')">Создание</button>
     <button @click="competenciesStore.deleteCompetency('5f15f5ba-4111-46dc-8f92-77b2ac33846d')">Удаление по ид</button>
   </div>
+  <h1 style="font-size: 35px;font-weight:bold;">Vacancies</h1>
+  <h2 style="font-size: 20px;font-weight:bold;">GET my vacancies</h2>
+  <div class="wrapper">
+    <button @click="vacanciesStore.fetchCurrentUserVacancies()">Fetch My Vacancies</button>
+  </div>
+  <h1 style="font-size: 35px;font-weight:bold;">Categories</h1>
+  <h2 style="font-size: 20px;font-weight:bold;">Fetch all categories</h2>
+  <div class="wrapper">
+    <button @click="categoriesStore.fetchCategories()">Fetch All Categories</button>
+    <button @click="categoriesStore.getCategoryById(categoriesStore.categories[0].uuid)">Get First category by id</button>
+  </div>
 </template>
 
 <script setup>
@@ -88,6 +99,8 @@ import { useUserStore } from '~/stores/user';
 import { useCitiesStore } from '~/stores/city';
 import { useRoleStore } from '~/stores/roles';
 import { useCompetenciesStore } from '~/stores/competencies';
+import { useVacanciesStore } from '~/stores/vacancies';
+import { useCategoriesStore } from '~/stores/categories';
 const { $apiClient } = useNuxtApp();
 
 const authStore = useAuthStore();
@@ -95,6 +108,8 @@ const userStore = useUserStore();
 const cityStore = useCitiesStore();
 const roleStore = useRoleStore();
 const competenciesStore = useCompetenciesStore();
+const vacanciesStore = useVacanciesStore();
+const categoriesStore = useCategoriesStore();
 
 const data = ref(null);
 const loading = ref(true);

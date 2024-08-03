@@ -59,6 +59,10 @@ export default ($apiClient: AxiosInstance) => ({
         const response = await $apiClient.get<Vacancy[]>('/vacancies/all');
         return response.data;
     },
+    async getCurrentUserVacancies(): Promise<Vacancy[]> {
+        const response = await $apiClient.get<Vacancy[]>('/vacancies/my');
+        return response.data;
+    },
     async searchVacancies(params: {
         page?: number;
         row?: number;
@@ -68,6 +72,10 @@ export default ($apiClient: AxiosInstance) => ({
         query?: string;
     }): Promise<Vacancy[]> {
         const response = await $apiClient.get<Vacancy[]>('/vacancies/search', { params });
+        return response.data;
+    },
+    async getVacancyById(uuid: string): Promise<Vacancy> {
+        const response = await $apiClient.get<Vacancy>(`/vacancies/${uuid}`);
         return response.data;
     },
     async banVacancy(banData: BanVacancyData): Promise<Vacancy> {
@@ -86,5 +94,11 @@ export default ($apiClient: AxiosInstance) => ({
             headers: { 'Content-Type': 'multipart/form-data' }
         });
         return response.data;
-    }
+    },
+    async deleteVacancy(uuid: string): Promise<boolean> {
+        const response = await $apiClient.delete<boolean>('/vacancies/delete', {
+            data: { uuid },
+        });
+        return response.data;
+    },
 });

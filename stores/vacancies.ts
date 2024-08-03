@@ -5,6 +5,7 @@ import { Vacancy, CreateVacancyData, UpdateVacancyData, BanVacancyData, UploadVa
 
 export const useVacanciesStore = defineStore('vacancies', () => {
     const vacancies = ref<Vacancy[]>([]);
+    const currentUserVacancies = ref<Vacancy[]>([]);
     const loading = ref(false);
     const error = ref<string | null>(null);
 
@@ -85,6 +86,40 @@ export const useVacanciesStore = defineStore('vacancies', () => {
         }
     }
 
+    async function fetchCurrentUserVacancies() {
+        loading.value = true;
+        error.value = null;
+        try {
+            const api = useApi();
+            const data = await api.vacancies.getCurrentUserVacancies();
+            currentUserVacancies.value = data;
+        } catch (err: any) {
+            if (err.response && err.response.status === 401) {
+                error.value = 'Unauthorized: You do not have permission to ban this vacancy';
+            } else {
+                error.value = 'Failed to ban vacancy';
+            }
+            console.error('Error banning vacancy', err);
+            return null;
+        } finally {
+            loading.value = false;
+        }
+    }
+
+    async function getVacancyById(uuid: string) {
+        loading.value = true;
+        error.value = null;
+        try {
+            const api = useApi();
+            const data = await api.vacancies.getVacancyById(uuid)
+            return data;
+        } catch (err: any) {
+            console.log("error")
+        } finally {
+            loading.value = false;
+        }
+    }
+
     async function banVacancy(banData: BanVacancyData) {
         loading.value = true;
         error.value = null;
@@ -127,6 +162,16 @@ export const useVacanciesStore = defineStore('vacancies', () => {
         }
     }
 
+    async function deleteVacancy(uuid: string) {
+        try {
+            const api = useApi();
+            await api.vacancies.deleteVacancy(uuid);
+            await fetchVacancies();
+        } catch (error) {
+            console.log("Error deleting vacancy", error);
+        }
+    }
+
     return {
         vacancies,
         loading,
@@ -135,7 +180,12 @@ export const useVacanciesStore = defineStore('vacancies', () => {
         createVacancy,
         searchVacancies,
         banVacancy,
-        unbanVacancy
+        unbanVacancy,
+        deleteVacancy,
+        currentUserVacancies,
+        fetchCurrentUserVacancies,
+        getVacancyById,
+        updateVacancy
     };
 }, {
     persist: true
