@@ -91,6 +91,18 @@
     <button @click="categoriesStore.fetchCategories()">Fetch All Categories</button>
     <button @click="categoriesStore.getCategoryById(categoriesStore.categories[0].uuid)">Get First category by id</button>
   </div>
+  <h1 style="font-size: 35px;font-weight:bold;">Professional Trials</h1>
+  <h2 style="font-size: 20px;font-weight:bold;">Fetch all trials</h2>
+  <div class="wrapper">
+    <button @click="professionalTrialsStore.fetchProfessionalTrials()">Fetch All trials without params</button>
+    <button @click="professionalTrialsStore.fetchProfessionalTrials(undefined, 6)">Fetch All trials with params</button>
+  </div>
+  <h1 style="font-size: 35px;font-weight:bold;">Professional Trials Categories</h1>
+  <h2 style="font-size: 20px;font-weight:bold;">Fetch all categories</h2>
+  <div class="wrapper">
+    <button @click="professionalTrialCategoriesStore.fetchCategories()">Fetch All</button>
+   
+  </div>
 </template>
 
 <script setup>
@@ -101,6 +113,8 @@ import { useRoleStore } from '~/stores/roles';
 import { useCompetenciesStore } from '~/stores/competencies';
 import { useVacanciesStore } from '~/stores/vacancies';
 import { useCategoriesStore } from '~/stores/categories';
+import { useProfessionalTrialsStore } from '~/stores/professional_trials';
+import { useProfessionalTrialCategoriesStore } from '~/stores/professional_trial_categories';
 const { $apiClient } = useNuxtApp();
 
 const authStore = useAuthStore();
@@ -110,6 +124,8 @@ const roleStore = useRoleStore();
 const competenciesStore = useCompetenciesStore();
 const vacanciesStore = useVacanciesStore();
 const categoriesStore = useCategoriesStore();
+const professionalTrialsStore = useProfessionalTrialsStore();
+const professionalTrialCategoriesStore = useProfessionalTrialCategoriesStore();
 
 const data = ref(null);
 const loading = ref(true);

@@ -17,7 +17,7 @@
 <script lang="ts">
 import { defineComponent, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { useReviewsStore } from '@/store/reviews';
+import { useReviewsStore } from '@/stores/reviews';
 
 export default defineComponent({
   setup() {

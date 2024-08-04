@@ -111,7 +111,7 @@ export const useVacanciesStore = defineStore('vacancies', () => {
         error.value = null;
         try {
             const api = useApi();
-            const data = await api.vacancies.getVacancyById(uuid)
+            const data = await api.vacancies.getVacancyById(uuid);
             return data;
         } catch (err: any) {
             console.log("error")
