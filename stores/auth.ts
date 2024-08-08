@@ -9,6 +9,8 @@ export const useAuthStore = defineStore('auth', () => {
   const refreshToken = ref<string | null>(null);
   const userStore = useUserStore();
 
+  const isAuthenticated = computed(() => token.value !== null);
+
   async function refresh() {
     try {
       const api = useApi()
@@ -69,7 +71,8 @@ export const useAuthStore = defineStore('auth', () => {
     signIn,
     signUp,
     refreshToken,
-    logout
+    logout,
+    isAuthenticated
   }
 }, {
   persist: true

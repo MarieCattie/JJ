@@ -1,6 +1,10 @@
 import svgLoader from 'vite-svg-loader';
+import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  build: {
+    transpile: ['vuetify'],
+  },
   app: {
     head: {
       title: 'JuniorJob',
@@ -21,17 +25,24 @@ export default defineNuxtConfig({
     },
   },
   components: ['@/components', { path: '@/components/UI', prefix: 'app' }],
-  css: ['@/assets/scss/global.scss'],
+  css: ['@/assets/scss/global.scss', '~/assets/main.scss', 'vuetify/styles'],
   modules: [
     '@nuxt/ui',
     'nuxt-icons',
     ['@pinia/nuxt', { autoImports: ['defineStore']}],
     '@pinia-plugin-persistedstate/nuxt',
     '@nuxtjs/i18n',
+    (_options, nuxt) => {
+      nuxt.hooks.hook('vite:extendConfig', (config) => {
+        // @ts-expect-error
+        config.plugins.push(vuetify({ autoImport: true }))
+      })
+    },
   ],
   plugins: [
     '~/plugins/apiClient.ts',
-    '~/plugins/api.ts'
+    '~/plugins/api.ts',
+    '~/plugins/vuetify.ts',
   ],
   runtimeConfig: {
     public: {
@@ -56,6 +67,11 @@ export default defineNuxtConfig({
             @use '@/assets/scss/mixins' as *;
           `,
         },
+      },
+    },
+    vue: {
+      template: {
+        transformAssetUrls,
       },
     },
   },

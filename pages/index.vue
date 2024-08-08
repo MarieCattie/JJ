@@ -4,6 +4,10 @@
       <button @click="authStore.logout()">Выход (/logout)</button>
       <button @click="authStore.refresh()">Выход (/logout)</button>
       <button @click="testMiddleware">Тестовое получение данных под авторизацией</button>
+      <v-btn>Sign Up</v-btn>
+      <v-btn icon="$vuetify" variant="outlined">
+        Button
+      </v-btn>
     </div>
 </template>
 
