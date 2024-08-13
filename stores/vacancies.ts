@@ -6,6 +6,7 @@ import { Vacancy, CreateVacancyData, UpdateVacancyData, BanVacancyData, UploadVa
 export const useVacanciesStore = defineStore('vacancies', () => {
     const vacancies = ref<Vacancy[]>([]);
     const currentUserVacancies = ref<Vacancy[]>([]);
+    const searchVacanciesArr = ref<Vacancy[] | null>();
     const loading = ref(false);
     const error = ref<string | null>(null);
 
@@ -77,7 +78,7 @@ export const useVacanciesStore = defineStore('vacancies', () => {
         try {
             const api = useApi();
             const data = await api.vacancies.searchVacancies(params);
-            vacancies.value = data;
+            searchVacanciesArr.value = data;
         } catch (err) {
             error.value = 'Failed to search vacancies';
             console.error('Error searching vacancies', err);
@@ -185,8 +186,11 @@ export const useVacanciesStore = defineStore('vacancies', () => {
         currentUserVacancies,
         fetchCurrentUserVacancies,
         getVacancyById,
-        updateVacancy
+        updateVacancy,
+        searchVacanciesArr
     };
 }, {
-    persist: true
+    persist: {
+        storage: persistedState.localStorage
+    }
 });

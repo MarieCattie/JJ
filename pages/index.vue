@@ -1,14 +1,7 @@
 <template>
-    <div>
-      <button @click="authStore.signIn('testtest@mail.ru', 'testtest')">Верная авторизация (/auth/local/signIn)</button>
-      <button @click="authStore.logout()">Выход (/logout)</button>
-      <button @click="authStore.refresh()">Выход (/logout)</button>
-      <button @click="testMiddleware">Тестовое получение данных под авторизацией</button>
-      <v-btn>Sign Up</v-btn>
-      <v-btn icon="$vuetify" variant="outlined">
-        Button
-      </v-btn>
-    </div>
+  <div>
+    <MainBanner />
+  </div>
 </template>
 
 <script setup>
@@ -24,6 +17,10 @@ const userStore = useUserStore();
 const data = ref(null);
 const loading = ref(true);
 const error = ref(null);
+
+definePageMeta({
+  layout: 'default'
+})
 
 onMounted(async () => {
   try {
@@ -51,6 +48,7 @@ const testMiddleware = async() => {
 
 
 </script>
+
 
 <style lang="scss" scoped>
 

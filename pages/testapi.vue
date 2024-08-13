@@ -3,7 +3,7 @@
     <h1 style="font-size: 35px;font-weight:bold;">Authorization</h1>
     <div class="wrapper">
       <button @click="authStore.signIn('moder@bk.ru', '54321')">авторизация модера (/auth/local/signin)</button>
-      <button @click="authStore.signIn('testtest@mail.ru', 'testtest')">Верная авторизация (/auth/local/signin)</button>
+      <button @click="authStore.signIn('testtesttest@mail.ru', 'testtesttest')">Верная авторизация (/auth/local/signin)</button>
       <button @click="authStore.signUp('apitestuser@mail.ru', 'apitestuser', '74a7174b-19d1-41fd-a897-6d65853fd257')">Регистрация (/auth/local/signup)</button>
       <button @click="authStore.refresh()">Рефреш (auth/refresh)</button>
       <button @click="authStore.logout()">Выход (auth/logout)</button>
@@ -70,7 +70,7 @@
   <div class="wrapper">
     <button @click="roleStore.getRolesByUserUuid('027038ad-0222-48e9-b30e-80236528fd1b')">Get User Role By Uuid </button>
     <button @click="roleStore.fetchRolesForCurrentUser">Fetch roles authorized user (roles/my GET)</button>
-    <button @click="roleStore.changeCurrentUserRole({ role: 'individual' })">Change role</button>
+    <button @click="roleStore.changeCurrentUserRole({ role: 'applicant' })">Change role</button>
   </div>
   <h1 style="font-size: 35px;font-weight:bold;">Competencies</h1>
   <h2 style="font-size: 20px;font-weight:bold;">GET all competencies</h2>

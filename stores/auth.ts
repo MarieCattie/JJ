@@ -11,6 +11,10 @@ export const useAuthStore = defineStore('auth', () => {
 
   const isAuthenticated = computed(() => token.value !== null);
 
+  const isApplicant = computed(() => token.value !== null && userStore.currentUser.role.current === 'applicant');
+
+  const isEmployer = computed(() => token.value !== null && (userStore.currentUser.role.current === 'individual' || userStore.currentUser.role.current === 'legal_entity'));
+
   async function refresh() {
     try {
       const api = useApi()
@@ -35,6 +39,7 @@ export const useAuthStore = defineStore('auth', () => {
       const data = await api.auth.signIn(email, password);
       token.value = data.access_token;
       refreshToken.value = data.refresh_token;
+      await userStore.fetchCurrentUser();
     } catch (error) {
       console.error('Error signing in', error);
       throw error;
@@ -59,6 +64,7 @@ export const useAuthStore = defineStore('auth', () => {
       await api.auth.logout(); // Assuming logout() is a function that sends a POST request to /auth/logout
       token.value = null;
       refreshToken.value = null;
+      userStore.currentUser = null;
     } catch (error) {
       console.error('Error logging out', error);
       throw error;
@@ -72,7 +78,8 @@ export const useAuthStore = defineStore('auth', () => {
     signUp,
     refreshToken,
     logout,
-    isAuthenticated
+    isAuthenticated,
+    isApplicant
   }
 }, {
   persist: true

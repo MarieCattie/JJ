@@ -39,6 +39,9 @@ export default defineNuxtConfig({
       })
     },
   ],
+  piniaPersistedstate: {
+    storage: 'localStorage',
+  },
   plugins: [
     '~/plugins/apiClient.ts',
     '~/plugins/api.ts',

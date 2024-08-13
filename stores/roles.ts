@@ -2,12 +2,14 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { useApi } from "~/composables/api";
 import { Role, Applicant, UpdateApplicantPayload, Individual, UpdateIndividualPayload, LegalEntity, UpdateLegalEntityPayload, Moderator, UpdateModeratorPayload, ChangeUserRolePayload, UserRoleResponse      } from "~/api/roles";
+import { useUserStore } from "~/stores/user";
 
 export const useRoleStore = defineStore('roles', () => {
   const rolesByCurrentUser = ref<Role[]>([]);
   const role = ref<Role | null>(null);
   const loading = ref(false);
   const error = ref<string | null>(null);
+  const userStore = useUserStore();
 
   async function getRolesByUserUuid(uuid: string) {
     loading.value = true;
@@ -191,6 +193,7 @@ export const useRoleStore = defineStore('roles', () => {
       const api = useApi();
       const data = await api.roles.changeCurrentUserRole(payload);
       await fetchRolesForCurrentUser();
+      await userStore.fetchCurrentUser();
       return data;
     } catch (err) {
       error.value = 'Failed to change user role';

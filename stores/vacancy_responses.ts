@@ -7,11 +7,12 @@ import { useUserStore } from "@/stores/user";
 export const useVacancyResponsesStore  = defineStore('vacancy_responses', () => {
     const loading = ref(false);
     const error = ref<string | null>(null);
+    const applicantResponses = ref<VacancyResponse[] | [] | null>(null);
     
     async function createVacancyResponse (responseData: CreateVacancyResponseData) {
         const userStore = useUserStore();
 
-        if (!userStore.currentUser || !userStore.currentUser.role.applicant) {
+        if (!userStore.currentUser || userStore.currentUser.role.current !== 'applicant') {
             throw new Error('Только соискатель может оставлять отклики на вакансии.');
         }
 
@@ -36,6 +37,7 @@ export const useVacancyResponsesStore  = defineStore('vacancy_responses', () => 
             loading.value = true;
             error.value = null;
             const responses = await api.vacancy_responses.getResponsesByApplicant(uuid);
+            applicantResponses.value = responses;
             return responses;
         } catch (err) {
             error.value = 'Ошибка при получении откликов соискателя';

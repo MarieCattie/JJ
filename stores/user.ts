@@ -174,7 +174,8 @@ export const useUserStore = defineStore('user', () => {
         deleteUser
     };
 }, {
-    persist: {
-        storage: persistedState.localStorage
-    }
+    persist: process.client ? {
+        storage: window.localStorage,
+        paths: ['currentUser', 'users'],
+    } : false, // Отключаем persist на сервере
 });
