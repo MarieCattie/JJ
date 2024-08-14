@@ -135,6 +135,7 @@ export const useVacancyResponsesStore  = defineStore('vacancy_responses', () => 
         deleteResponse,
         selectResponse,
         loading,
+        applicantResponses,
         error
     };
 })

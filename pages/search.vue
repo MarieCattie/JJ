@@ -23,7 +23,7 @@
     <h2 class="text-3xl mt-4">Вакансии</h2>
     <!-- Карточки вакансий -->
     <div v-if="vacancies.length" class="vacancies-list mt-4">
-      <div v-for="vacancy in vacancies" :key="vacancy.uuid" class="vacancy-card">
+      <NuxtLink v-for="vacancy in vacancies" :key="vacancy.uuid" class="vacancy-card" :to="{ path: `vacancy/${vacancy.uuid}`}">
         
         <img v-if="vacancy.image !== 'image.png'" :src="`/storage/vacancies/${vacancy.image}`" alt="vacancy image" class="vacancy-image" />
         <h3 class="vacancy-title">{{ vacancy.title }}</h3>
@@ -32,90 +32,42 @@
         <p class="vacancy-time">График: {{ vacancy.time }}</p>
        
         <!-- Дополнительная информация -->
-        <div v-if="useAuthStore().isApplicant" class="pa-4 text-center">
-          <v-btn-group
-          >
-            <v-btn
-              class="pe-2"
-              
-            >
-              <div class="btn btn-primary">
-                Откликнуться
-              </div>
-      
-              <v-dialog activator="parent" max-width="500">
-                <template v-slot:default="{ isActive }">
-                  <v-card rounded="lg">
-                    <v-card-title class="d-flex justify-space-between align-center">
-                      <div class="text-h5 text-medium-emphasis ps-2">
-                        Откликнуться
-                      </div>
-      
-                      <v-btn
-                        icon="mdi-close"
-                        variant="text"
-                        @click="isActive.value = false"
-                      ></v-btn>
-                    </v-card-title>
-      
-                    <v-divider class="mb-4"></v-divider>
-      
-                    <v-card-text>
-                      <div class="text-medium-emphasis mb-4">
-                        Расскажите о ваших навыках и качествах, что вы умеете
-                      </div>
-      
-                      <div class="mb-2">Сообщение:</div>
-      
-                      <v-textarea
-                        :counter="300"
-                        class="mb-2"
-                        rows="2"
-                        variant="outlined"
-                        persistent-counter
-                        required
-                        v-model="vacancyText"
-                      ></v-textarea>
-      
-                      <div class="d-none text-medium-emphasis mb-1">
-                        Share with unlimited people and get more insights about your network. Try Premium Free for 30 days.
-                      </div>
-      
-                      <v-btn
-                        class="d-none text-none font-weight-bold ms-n4"
-                        color="primary"
-                        text="Retry Premium Free"
-                        variant="text"
-                      ></v-btn>
-                    </v-card-text>
-      
-                    <v-divider class="mt-2"></v-divider>
-      
-                    <v-card-actions class="my-2 d-flex justify-end">
-                      <v-btn
-                        class="text-none"
-                        rounded="xl"
-                        text="Отмена"
-                        @click="isActive.value = false; vacancyText.value = '';"
-                      ></v-btn>
-      
-                      <v-btn
-                        class="text-none"
-                        color="primary"
-                        rounded="xl"
-                        text="Отправить"
-                        variant="flat"
-                        @click="isActive.value = false;applyToVacancy(vacancyText, vacancy.uuid)"
-                      ></v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </template>
-              </v-dialog>
-            </v-btn>
-      
-          </v-btn-group>
+        <div v-if="isApplicant">
+          <div v-if="hasResponded(vacancy.uuid)">
+            <p class="text-primary font-bold" >Вы уже откликнулись на вакансию</p>
+            <button @click="deleteResponse(vacancy.uuid)" class="btn btn-danger mt-4">Отменить отклик</button>
+          </div>
+          
+          <div v-else class="pa-4 text-center">
+            <v-btn-group>
+              <v-btn class="pe-2">
+                <div class="btn btn-primary">Откликнуться</div>
+                <v-dialog activator="parent" max-width="500">
+                  <template v-slot:default="{ isActive }">
+                    <v-card rounded="lg">
+                      <v-card-title class="d-flex justify-space-between align-center">
+                        <div class="text-h5 text-medium-emphasis ps-2">Откликнуться</div>
+                        <v-btn icon="mdi-close" variant="text" @click="isActive.value = false"></v-btn>
+                      </v-card-title>
+                      <v-divider class="mb-4"></v-divider>
+                      <v-card-text>
+                        <div class="text-medium-emphasis mb-4">Расскажите о ваших навыках и качествах, что вы умеете</div>
+                        <div class="mb-2">Сообщение:</div>
+                        <v-textarea :counter="300" class="mb-2" rows="2" variant="outlined" persistent-counter required v-model="vacancyText"></v-textarea>
+                      </v-card-text>
+                      <v-divider class="mt-2"></v-divider>
+                      <v-card-actions class="my-2 d-flex justify-end">
+                        <v-btn class="text-none" rounded="xl" text="Отмена" @click="isActive.value = false; vacancyText.value = '';"></v-btn>
+                        <v-btn class="text-none" color="primary" rounded="xl" text="Отправить" variant="flat" @click="isActive.value = false; applyToVacancy(vacancyText, vacancy.uuid)"></v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </template>
+                </v-dialog>
+              </v-btn>
+            </v-btn-group>
+          </div>
         </div>
-      </div>
+      </NuxtLink>
 
       
     </div>
@@ -128,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useVacanciesStore } from '~/stores/vacancies';
 import { useUserStore } from '~/stores/user';
 import { useAuthStore } from '~/stores/auth';
@@ -138,18 +90,31 @@ import { useVacancyResponsesStore } from '~/stores/vacancy_responses';
 
 const store = useVacanciesStore();
 const userStore = useUserStore();
-const authStore = useUserStore();
+const authStore = useAuthStore();
 const vacancyResponseStore = useVacancyResponsesStore();
 const route = useRoute();
 const router = useRouter();
 const api = useApi();
 const vacancyText = ref('');
+const applicantResponses = ref([]);
 
 const isApplicant = authStore?.isApplicant;
-
 const vacancies = ref(store.searchVacanciesArr || []);
 const searchQuery = ref(route.query.query || '');
 
+// Загрузка откликов пользователя при монтировании компонента
+onMounted(async () => {
+  if (isApplicant && userStore.currentUser?.uuid) {
+    applicantResponses.value = await vacancyResponseStore.getResponsesByApplicant(userStore.currentUser.uuid);
+  }
+});
+
+// Функция для проверки, откликнулся ли пользователь на вакансию
+const hasResponded = (vacancyUuid: string) => {
+  return applicantResponses.value.some(response => response.vacancy.uuid === vacancyUuid);
+};
+
+// Обновление вакансий при изменении поискового запроса
 watch(() => route.query.query, async (newQuery) => {
   if (newQuery) {
     searchQuery.value = newQuery;
@@ -165,11 +130,20 @@ const handleSearch = async () => {
 };
 
 const applyToVacancy = async (text, uuid) => {
-  alert(text)
-  alert(uuid)
   await vacancyResponseStore.createVacancyResponse({uuid: uuid, message: text});
-  await vacancyResponseStore.getResponsesByApplicant(userStore.currentUser.uuid)
+  applicantResponses.value = await vacancyResponseStore.getResponsesByApplicant(userStore.currentUser.uuid);
 }
+
+const deleteResponse = async (vacancyUuid: string) => {
+  const response = applicantResponses.value.find(response => response.vacancy.uuid === vacancyUuid)
+  if(response) {
+    const responseId = response.uuid;
+    await vacancyResponseStore.deleteResponse(responseId)
+    applicantResponses.value = await vacancyResponseStore.getResponsesByApplicant(userStore.currentUser.uuid);
+  }
+  
+};
+
 </script>
 
 <style scoped>

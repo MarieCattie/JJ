@@ -3,6 +3,9 @@
     border-radius: 10px;
     text-transform: none;
 }
+.btn-mini {
+    padding: 10px;
+}
 .btn-outline {
     color: #604D9E;
     font-size: 18px;
@@ -16,6 +19,13 @@
     font-size: 18px;
     font-weight: 600;
     background-color: #AAA2D8;
+}
+
+.btn-danger {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 600;
+    background-color: #ff0008;
 }
 @media screen and (max-width: 1280px) {
     .v-container {
