@@ -44,6 +44,7 @@ export default defineNuxtConfig({
   },
   plugins: [
     '~/plugins/apiClient.ts',
+    '~/plugins/chatapiClient.ts',
     '~/plugins/api.ts',
     '~/plugins/vuetify.ts',
   ],

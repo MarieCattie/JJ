@@ -101,7 +101,8 @@
   <h2 style="font-size: 20px;font-weight:bold;">Fetch all categories</h2>
   <div class="wrapper">
     <button @click="professionalTrialCategoriesStore.fetchCategories()">Fetch All</button>
-   
+
+    <button @click="chatStore.fetchChats()">fetch chats</button>
   </div>
 </template>
 
@@ -114,6 +115,7 @@ import { useCompetenciesStore } from '~/stores/competencies';
 import { useVacanciesStore } from '~/stores/vacancies';
 import { useCategoriesStore } from '~/stores/categories';
 import { useProfessionalTrialsStore } from '~/stores/professional_trials';
+import { useChatStore } from '~/stores/chat';
 import { useProfessionalTrialCategoriesStore } from '~/stores/professional_trial_categories';
 const { $apiClient } = useNuxtApp();
 
@@ -121,6 +123,7 @@ const authStore = useAuthStore();
 const userStore = useUserStore();
 const cityStore = useCitiesStore();
 const roleStore = useRoleStore();
+const chatStore = useChatStore();
 const competenciesStore = useCompetenciesStore();
 const vacanciesStore = useVacanciesStore();
 const categoriesStore = useCategoriesStore();

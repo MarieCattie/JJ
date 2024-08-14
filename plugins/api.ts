@@ -11,10 +11,11 @@ import vacancyResponses from '~/api/vacancy_responses';
 import professionalTrialsApi from '~/api/professional_trials';
 import professionalTrialCategoriesApi from '~/api/professional_trial_categories';
 import articlesApi from '~/api/articles';
+import chatApi from '~/api/chat';
 
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const { $apiClient } = nuxtApp;
+  const { $apiClient, $chatapiClient } = nuxtApp;
 
   const api = {
     auth: authApi($apiClient),
@@ -28,7 +29,8 @@ export default defineNuxtPlugin((nuxtApp) => {
     vacancy_responses: vacancyResponses($apiClient),
     professional_trials: professionalTrialsApi($apiClient),
     professional_trial_categories: professionalTrialCategoriesApi($apiClient),
-    articles: articlesApi($apiClient)
+    articles: articlesApi($apiClient),
+    chat: chatApi($chatapiClient)
   };
 
   nuxtApp.provide('api', api);
