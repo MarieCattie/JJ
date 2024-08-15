@@ -23,6 +23,7 @@
   import { ref, watch, onMounted } from 'vue';
   import { useChatStore } from '~/stores/chat';
   import { useUserStore } from '~/stores/user';
+  import { useAuthStore } from '~/stores/auth';
   
   const props = defineProps({
     chat: Object, // Текущий выбранный чат
@@ -30,8 +31,11 @@
   
   const chatStore = useChatStore();
   const userStore = useUserStore();
+  const authStore = useAuthStore();
   const messages = chatStore.messages;
   const loading = chatStore.loading;
+
+  const socket = ref(null);
   
   const newMessage = ref('');
   const messageList = ref(null); // Ссылка на список сообщений
@@ -40,6 +44,7 @@
     if (newMessage.value.trim()) {
       chatStore.sendMessage(newMessage.value);
       newMessage.value = '';
+      chatStore.fetchMessages(props.chat.uuid)
     }
   }
   
@@ -58,6 +63,17 @@
   onMounted(() => {
     if (messageList.value) {
       messageList.value.scrollTop = messageList.value.scrollHeight;
+    }
+    if(authStore.token) {
+     
+      // socket.value = io("wss://socket.junior-job.ru", {
+      //     query: {
+      //       user_uuid: "092a4671-2544-468c-8da0-2cd4c96c2a6c",
+      //     },
+      //     extraHeaders: {
+      //       authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiM2Q5ZWU3N2EtY2IzYi00NmJjLTlhMjktM2MzYTJiOWFlYzJlIiwiZW1haWwiOiJ0ZXN0dGVzdHRlc3RAbWFpbC5ydSIsInJvbGUiOiJhcHBsaWNhbnQiLCJpYXQiOjE3MjM2OTc5MDYsImV4cCI6MTcyMzY5ODgwNn0.9IPZBfO9PXJZibBjeLYD1e-MMZWk_OQbzREwjoSxChs",
+      //     },
+      //   });
     }
   });
   </script>

@@ -13,7 +13,9 @@
     background: transparent;
     border-color: transparent;
 }
-
+.btn-bordered {
+    border: 2px solid #524288;
+}
 .btn-primary {
     color: #ffffff;
     font-size: 18px;
@@ -33,3 +35,13 @@
         max-width: 100% !important;
     }
 }
+.v-toolbar__content {
+    overflow: visible !important;
+}
+.icon-white {
+    color: white !important;
+  }
+  
+  .icon-purple {
+    color: #604D9E !important;
+  }

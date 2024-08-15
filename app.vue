@@ -14,7 +14,7 @@ import { onMounted } from 'vue';
 
 const chatStore = useChatStore();
 onMounted(() => {
-    chatStore.initializeSocket();
+ 
 })
 </script>
 

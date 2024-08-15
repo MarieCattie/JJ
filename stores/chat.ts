@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { useApi } from '~/composables/api';
 import { io } from 'socket.io-client';
 import { useUserStore } from './user';
+import { useAuthStore } from './auth';
 
 interface ChatMessage {
     uuid: string;
@@ -31,14 +32,15 @@ export const useChatStore = defineStore('chat', () => {
     const socket = ref<any>(null);
 
     const userStore = useUserStore();
+    const authStore = useAuthStore();
 
     // Инициализация Socket.IO
-    function initializeSocket() {
-        const token = userStore.currentUser?.token;
+    function initializeSocket(companionUuid: string) {
+        const token = authStore.token;
         if (token && !socket.value) {
             socket.value = io("wss://socket.junior-job.ru", {
                 query: {
-                    user_uuid: userStore.currentUser?.uuid,
+                    user_uuid: companionUuid,
                 },
                 extraHeaders: {
                     authorization: token,
@@ -51,13 +53,14 @@ export const useChatStore = defineStore('chat', () => {
 
             socket.value.on("incoming", (data: ChatMessage) => {
                 messages.value.unshift(data);
+                fetchMessages(currentChat.value?.uuid)
                 scrollToBottom();
             });
 
             socket.value.on("disconnect", (reason: string) => {
                 console.log(`Disconnected: ${reason}`);
             });
-        }
+        } 
     }
 
     async function fetchChats() {
@@ -103,7 +106,7 @@ export const useChatStore = defineStore('chat', () => {
         };
 
         // Отправка сообщения на сервер через сокет
-        socket.value.emit("message", newMessage);
+        socket.value.emit("message", {body: content});
 
         // Локально добавляем сообщение в список
         messages.value.push({

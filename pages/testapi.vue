@@ -3,6 +3,7 @@
     <h1 style="font-size: 35px;font-weight:bold;">Authorization</h1>
     <div class="wrapper">
       <button @click="authStore.signIn('moder@bk.ru', '54321')">авторизация модера (/auth/local/signin)</button>
+      <button @click="authStore.signIn('alina@mail.ru', 'alinaalina')">авторизация alina (/auth/local/signin)</button>
       <button @click="authStore.signIn('testtesttest@mail.ru', 'testtesttest')">Верная авторизация (/auth/local/signin)</button>
       <button @click="authStore.signUp('apitestuser@mail.ru', 'apitestuser', '74a7174b-19d1-41fd-a897-6d65853fd257')">Регистрация (/auth/local/signup)</button>
       <button @click="authStore.refresh()">Рефреш (auth/refresh)</button>

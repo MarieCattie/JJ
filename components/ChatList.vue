@@ -1,7 +1,7 @@
 <template>
     <div v-if="loading">Loading...</div>
     <ul v-else>
-      <li v-for="chat in chats" :key="chat.uuid" @click="selectChat(chat)">
+      <li v-for="chat in chatStore.chats" :key="chat.uuid" @click="selectChat(chat)">
         {{ getCompanionName(chat) }}
       </li>
     </ul>
@@ -47,6 +47,14 @@
   function selectChat(chat) {
     // Эмитируем событие выбора чата
     emit('chatSelected', chat);
+
+
+    const isCurrentUserFirst = chat.first_user === userStore.currentUser.uuid;
+  const companionUuid = isCurrentUserFirst ? chat.second_user : chat.first_user;
+
+  // Передаем uuid чата в initializeSocket
+  
+    chatStore.initializeSocket(companionUuid);
   }
   </script>
   

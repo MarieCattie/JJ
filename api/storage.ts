@@ -1,11 +1,11 @@
 import { AxiosInstance } from "axios";
-
+// НЕ ИСПОЛЬЗУЕТСЯ! ИСПОЛЬЗУЙ COMPOSABLES USESTORAGE
 export default ($apiClient: AxiosInstance) => ({
     async showVacancyImage(filename: string): Promise<string> {
         return `storage/vacancies/${filename}`
     },
-    async showUserImage(filename: string): Promise<string> {
-        return `storage/users/${filename}`
+    showUserImage(filename: string) {
+        return `${$config.public.backendAddress}/storage/users/${filename}`
     },
     async showVacanciesCategoryImage(filename: string): Promise<string> {
         return `storage/vacanciesCategory/${filename}`

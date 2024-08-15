@@ -25,7 +25,7 @@
   
   onMounted(() => {
     // Инициализируем соединение через сокет при загрузке страницы
-    chatStore.initializeSocket();
+    // chatStore.initializeSocket();
   
     // Загружаем список чатов
     chatStore.fetchChats();
