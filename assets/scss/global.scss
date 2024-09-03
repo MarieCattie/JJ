@@ -3,9 +3,11 @@
     border-radius: 10px;
     text-transform: none;
 }
+
 .btn-mini {
     padding: 10px;
 }
+
 .btn-outline {
     color: #604D9E;
     font-size: 18px;
@@ -13,9 +15,11 @@
     background: transparent;
     border-color: transparent;
 }
+
 .btn-bordered {
     border: 2px solid #524288;
 }
+
 .btn-primary {
     color: #ffffff;
     font-size: 18px;
@@ -29,19 +33,31 @@
     font-weight: 600;
     background-color: #ff0008;
 }
+
 @media screen and (max-width: 1280px) {
     .v-container {
         width: 100% !important;
         max-width: 100% !important;
     }
 }
+
 .v-toolbar__content {
     overflow: visible !important;
 }
+
 .icon-white {
     color: white !important;
-  }
-  
-  .icon-purple {
+}
+
+.icon-purple {
     color: #604D9E !important;
-  }
+}
+
+.main-title {
+    color: #2c1b47;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+}
+

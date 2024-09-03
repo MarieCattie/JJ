@@ -42,13 +42,14 @@ export interface Individual {
 export interface UpdateApplicantPayload {
     name: string;
     surname: string;
+    patronymic: string;
     birthday: string;
     study_place: string;
     inn: string;
     competencies_titles: string[];
     summary: string;
-    created_at: string;
-    updated_at: string;
+    created_at?: string;
+    updated_at?: string;
 }
 
 export interface UpdateIndividualPayload {

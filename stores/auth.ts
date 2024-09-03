@@ -7,6 +7,7 @@ export const useAuthStore = defineStore('auth', () => {
   
   const token = ref<string | null>(null);
   const refreshToken = ref<string | null>(null);
+  const errorMessage = ref<string | null>(null);
   const userStore = useUserStore();
 
   const isAuthenticated = computed(() => token.value !== null);
@@ -40,9 +41,22 @@ export const useAuthStore = defineStore('auth', () => {
       token.value = data.access_token;
       refreshToken.value = data.refresh_token;
       await userStore.fetchCurrentUser();
-    } catch (error) {
+      errorMessage.value = null; // Сброс ошибки при успешной авторизации
+    } catch (error: any) {
       console.error('Error signing in', error);
-      throw error;
+      // Обработка ошибок с учетом строки или массива
+      const serverMessage = error.response?.data?.message;
+      if (serverMessage) {
+        if (Array.isArray(serverMessage)) {
+          // Если это массив, объединяем его элементы в одну строку
+          errorMessage.value = serverMessage.join('. ');
+        } else {
+          // Если это строка
+          errorMessage.value = serverMessage;
+        }
+      } else {
+        errorMessage.value = 'Произошла ошибка при входе в систему. Пожалуйста, попробуйте еще раз.';
+      }
     }
   }
 
@@ -52,9 +66,21 @@ export const useAuthStore = defineStore('auth', () => {
       const data = await api.auth.signUp(email, password, cityUuid);
       token.value = data.access_token;
       refreshToken.value = data.refresh_token;
-    } catch (error) {
+      errorMessage.value = null; // Сброс ошибки при успешной регистрации
+    } catch (error: any) {
       console.error('Error signing up', error);
-      throw error;
+      const serverMessage = error.response?.data?.message;
+      if (serverMessage) {
+        if (Array.isArray(serverMessage)) {
+          errorMessage.value = serverMessage.join('. ');
+        } else {
+          errorMessage.value = serverMessage;
+        }
+      } else {
+        errorMessage.value = 'Произошла ошибка при регистрации. Пожалуйста, попробуйте еще раз.';
+      }
+      
+      throw error; // Перебрасываем ошибку для дальнейшей обработки
     }
   }
 
@@ -79,7 +105,8 @@ export const useAuthStore = defineStore('auth', () => {
     refreshToken,
     logout,
     isAuthenticated,
-    isApplicant
+    isApplicant,
+    errorMessage
   }
 }, {
   persist: true

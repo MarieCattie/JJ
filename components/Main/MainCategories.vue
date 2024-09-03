@@ -59,6 +59,9 @@ onMounted(() => {
             object-fit: contain;
         }
      }
+     @media screen and (max-width: 520px) {
+      width: 100%;
+     }
     }
 }
 </style>

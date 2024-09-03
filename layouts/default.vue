@@ -7,7 +7,7 @@
 
         <!-- Логотип в левом углу -->
         <a href="/" class="d-flex align-center">
-          <v-img src="@/assets/images/logo.svg" contain width="187"></v-img>
+          <v-img src="@/assets/images/logo.svg" contain width="187"></v-img></a>
           <!-- Меню с отступом -->
           <div class="d-none d-md-flex ml-8">
 
@@ -19,7 +19,7 @@
               </div>
             </v-btn>
           </div>
-        </a>
+        
 
         <!-- Кнопки "Зарегистрироваться" и "Войти" в правом углу на десктопе -->
         <div class="d-none d-md-flex align-center ml-5">
@@ -200,8 +200,8 @@ const items = [
   { title: 'Настройки', to: '/settings', icon: settingsIcon }
 ];
 
-const goToSignUp = () => router.push('/signup');
-const goToSignIn = () => router.push('/signin');
+const goToSignUp = () => router.push('/register');
+const goToSignIn = () => router.push('/login');
 
 const logout = async () => {
   await authStore.logout();

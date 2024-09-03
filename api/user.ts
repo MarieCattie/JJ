@@ -13,7 +13,7 @@ interface Applicant {
     birthday: string;
     study_place: string;
     inn: string;
-    competitions: string;
+    competencies_titles: string[];
     summary: string;
     created_at: string;
     updated_at: string;
