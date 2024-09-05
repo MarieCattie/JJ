@@ -19,13 +19,15 @@ export default defineNuxtPlugin(nuxtApp => {
       themes: {
         light: {
           colors: {
-            primary: '#604D9E',
-            secondary: '#424242',
+            primary: '#604D9E', /** dark purple */
+            secondary: '#865CFF', /** яркий насыщенный фиолетовый */
             accent: '#82B1FF',
             error: '#FF5252',
             info: '#2196F3',
             success: '#4CAF50',
             warning: '#FFC107',
+            background: '#FDFCFF',
+            purplefresh: '#AA9FEF'
           },
         },
       },

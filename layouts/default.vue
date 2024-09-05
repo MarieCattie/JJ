@@ -1,13 +1,13 @@
 <template>
-  <v-app dark>
+  <v-app>
     <!-- Шапка приложения -->
     <v-app-bar :elevation="0" :class="{ 'white-header': isScrolled, 'transparent-header': !isScrolled }" fixed app
       id="main-header">
       <v-container class="d-flex align-center justify-space-between mb-4 mt-4">
 
         <!-- Логотип в левом углу -->
-        <a href="/" class="d-flex align-center">
-          <v-img src="@/assets/images/logo.svg" contain width="187"></v-img></a>
+        <NuxtLink to="/" href="/" class="d-flex align-center">
+          <v-img src="@/assets/images/logo.svg" contain width="187"></v-img></NuxtLink>
           <!-- Меню с отступом -->
           <div class="d-none d-md-flex ml-8">
 

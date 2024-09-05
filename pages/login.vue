@@ -10,7 +10,7 @@
           <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
           <div class="mt-2">
             <input v-model="email" id="email" name="email" type="email" autocomplete="email" required
-              class="block outline-none w-full rounded-xl border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#604D9E] sm:text-sm sm:leading-6 pl-3" />
+              class="block outline-none w-full rounded-xl border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#604D9E] sm:text-sm sm:leading-6 pl-3" placeholder="Введите e-mail" />
           </div>
         </div>
 
@@ -24,7 +24,7 @@
           <div class="mt-2">
             <input v-model="password" id="password" name="password" type="password" autocomplete="current-password"
               required=""
-              class="block outline-none w-full rounded-xl border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#604D9E] sm:text-sm sm:leading-6 pl-3" />
+              class="block outline-none w-full rounded-xl border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#604D9E] sm:text-sm sm:leading-6 pl-3" placeholder="Введите пароль" />
           </div>
         </div>
          <!-- Отображение ошибки -->
