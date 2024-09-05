@@ -3,7 +3,6 @@
         <h1 class="main-title mb-8 text-center mt-10">Регистрация исполнителя (соискателя)</h1>
 
         <form @submit.prevent="register" class="form mx-auto">
-            
             <AppUploadImage @change="uploadImage" />
             <AppInput class="w-full" id="surname" name="surname" label="Фамилия" type="text"
                 v-model="applicant.userData.surname" required placeholder="Введите вашу фамилию" />

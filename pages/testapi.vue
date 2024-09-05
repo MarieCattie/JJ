@@ -27,7 +27,7 @@
     </div>
     <h2 style="font-size: 20px;font-weight:bold;">GET /users/email/{email}</h2>
     <div class="wrapper">
-      <button @click="userStore.getUserByEmail('testtest@mail.ru')">GetByEmail testtest@mail.ru</button>
+      <button @click="userStore.getUserByEmail('testapplicant@mail.ru')">GetByEmail testapplicant@mail.ru</button>
     </div>
     <h2 style="font-size: 20px;font-weight:bold;">GET /users/{uuid}</h2>
     <div class="wrapper">

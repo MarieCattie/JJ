@@ -27,7 +27,8 @@ export default defineNuxtPlugin(nuxtApp => {
             success: '#4CAF50',
             warning: '#FFC107',
             background: '#FDFCFF',
-            purplefresh: '#AA9FEF'
+            purplefresh: '#AA9FEF',
+            purplelight: '##d8d4f1'
           },
         },
       },

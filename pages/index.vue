@@ -1,6 +1,8 @@
 <template>
   <div>
-    <MainBanner />
+    <div v-if="loading"></div>
+    <template v-else>
+      <MainBanner />
     <h3 class="main-title-3 mb-4">
       Мы предлагаем вакансии в различных сферах деятельности: от работы в кафе и ресторанах до фриланса и удаленной работы
     </h3>
@@ -12,6 +14,8 @@
     <MainAdvantages />
     <h2 class="main-title-2 mt-15 mb-6">Новые вакансии</h2>
     <MainVacancies class="mb-16" />
+    </template>
+    
   </div>
 </template>
 

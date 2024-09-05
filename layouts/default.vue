@@ -6,7 +6,7 @@
       <v-container class="d-flex align-center justify-space-between mb-4 mt-4">
 
         <!-- Логотип в левом углу -->
-        <NuxtLink to="/" href="/" class="d-flex align-center">
+        <NuxtLink to="/" class="d-flex align-center">
           <v-img src="@/assets/images/logo.svg" contain width="187"></v-img></NuxtLink>
           <!-- Меню с отступом -->
           <div class="d-none d-md-flex ml-8">
@@ -203,9 +203,9 @@ const items = [
 const goToSignUp = () => router.push('/register');
 const goToSignIn = () => router.push('/login');
 
-const logout = async () => {
-  await authStore.logout();
-  navigateTo('/');
+const logout = () => {
+  authStore.logout();
+  router.push('/login')
 }
 
 onMounted(() => {

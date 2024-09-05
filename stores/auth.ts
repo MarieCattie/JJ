@@ -1,14 +1,16 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import {useApi} from "~/composables/api";
+import { useApi } from "~/composables/api";
 import { useUserStore } from "~/stores/user";
+import { useRoleStore } from "~/stores/roles";
 
 export const useAuthStore = defineStore('auth', () => {
-  
+
   const token = ref<string | null>(null);
   const refreshToken = ref<string | null>(null);
   const errorMessage = ref<string | null>(null);
   const userStore = useUserStore();
+  const roleStore = useRoleStore();
 
   const isAuthenticated = computed(() => token.value !== null);
 
@@ -42,6 +44,8 @@ export const useAuthStore = defineStore('auth', () => {
       refreshToken.value = data.refresh_token;
       await userStore.fetchCurrentUser();
       errorMessage.value = null; // Сброс ошибки при успешной авторизации
+      await roleStore.fetchRolesForCurrentUser();
+      userStore.currentUser = { ...userStore.currentUser, ...roleStore.rolesByCurrentUser[roleStore.rolesByCurrentUser?.current] }
     } catch (error: any) {
       console.error('Error signing in', error);
       // Обработка ошибок с учетом строки или массива
@@ -79,18 +83,21 @@ export const useAuthStore = defineStore('auth', () => {
       } else {
         errorMessage.value = 'Произошла ошибка при регистрации. Пожалуйста, попробуйте еще раз.';
       }
-      
+
       throw error; // Перебрасываем ошибку для дальнейшей обработки
     }
   }
 
   async function logout() {
     try {
-      const api = useApi();
-      await api.auth.logout(); // Assuming logout() is a function that sends a POST request to /auth/logout
       token.value = null;
       refreshToken.value = null;
       userStore.currentUser = null;
+      localStorage.removeItem('auth');
+      localStorage.removeItem('roles');
+      localStorage.removeItem('user');
+      const api = useApi();
+      await api.auth.logout(); // Assuming logout() is a function that sends a POST request to /auth/logout
     } catch (error) {
       console.error('Error logging out', error);
       throw error;
@@ -106,6 +113,7 @@ export const useAuthStore = defineStore('auth', () => {
     logout,
     isAuthenticated,
     isApplicant,
+    isEmployer,
     errorMessage
   }
 }, {

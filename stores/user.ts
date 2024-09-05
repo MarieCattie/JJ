@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { useApi } from "~/composables/api"; // Импортируем ваш API клиент
+import { useRoleStore } from "~/stores/roles";
 interface FetchUsersParams {
     page?: number;
     row?: number;
@@ -10,6 +11,7 @@ interface FetchUsersParams {
   }
 export const useUserStore = defineStore('user', () => {
     const users = ref<User[]>([]);
+    const roleStore = useRoleStore();
     const currentUser = ref<any>(null);
     const loading = ref(false);
     const error = ref<string | null>(null);
@@ -40,6 +42,8 @@ export const useUserStore = defineStore('user', () => {
             const api = useApi();
             const user = await api.user.getUserByToken();
             currentUser.value = user;
+            await roleStore.fetchRolesForCurrentUser();
+            currentUser.value = { ...currentUser.value, ...roleStore.rolesByCurrentUser[roleStore.rolesByCurrentUser?.current] }
             console.log(user);
         } catch (error) {
             console.error("Ошибка при получении пользователя:", error);
@@ -114,7 +118,7 @@ export const useUserStore = defineStore('user', () => {
         try {
             const api = useApi();
             const user = await api.user.changeEmail(email, password);
-            currentUser.value = user;
+            await fetchCurrentUser()
             console.log('Email changed successfully:', user);
         } catch (error) {
             console.error('Error changing email:', error);
