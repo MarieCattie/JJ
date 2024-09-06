@@ -22,10 +22,11 @@
           <div class="mt-8 w-full" v-if="authStore?.isApplicant">
             <h3 class="text-lg font-semibold mb-4 text-gray-700">Навыки</h3>
             <div class="flex flex-wrap gap-2" v-if="userStore.currentUser.competencies">
-              <v-chip v-for="competency in userStore.currentUser.competencies" class="bg-purplefresh text-gray-700">{{competency.title}}</v-chip>
+              <v-chip v-for="competency in userStore.currentUser.competencies"
+                class="bg-purplefresh text-gray-700">{{ competency.title }}</v-chip>
             </div>
           </div>
-          
+
         </div>
 
         <!-- Правая колонка (60% ширины) -->
@@ -85,7 +86,7 @@
               <template v-if="currentRole === 'legal_entity'">
 
               </template>
-             </div>
+            </div>
             <div v-if="activeTab === 'dashboard'">
               <p>Эта вкладка в разработке</p>
             </div>
@@ -93,15 +94,34 @@
               <div class="pb-6 w-full border-b border-gray-300">
                 <h3 class="text-lg font-semibold mb-3 text-primary">Обновить аватарку</h3>
                 <AppUploadImage class="update-avatar" @change="uploadImage" />
-                <button @click="updateAvatar" class="btn btn-primary btn-mini btn-update mt-[25px]">Обновить аватарку</button>
+                <button @click="updateAvatar" class="btn btn-primary btn-mini btn-update mt-[25px]">Обновить
+                  аватарку</button>
               </div>
               <div class="pb-6 w-full border-b border-gray-300 pt-5">
                 <h3 class="text-lg font-semibold mb-3 text-primary">Обновить e-mail</h3>
-                <AppInput class="w-full" id="email" name="email" label="Новый e-mail" type="email" v-model="newEmail.email"
-                required autocomplete="email" placeholder="Введите новый email" />
+                <AppInput class="w-full" id="email" name="email" label="Новый e-mail" type="email"
+                  v-model="newEmail.email" required autocomplete="email" placeholder="Введите новый email" />
                 <AppInput class="w-full" id="password" name="password" label="Пароль для подтверждения" type="password"
-                v-model="newEmail.password" required placeholder="Введите ваш пароль для подтверждения смены email" />
+                  v-model="newEmail.password" required placeholder="Введите ваш пароль для подтверждения смены email" />
                 <button @click="updateEmail" class="btn btn-primary btn-mini btn-update mt-3">Обновить e-mail</button>
+              </div>
+              <div class="pb-6 w-full border-b border-gray-300 pt-5">
+                <h3 class="text-lg font-semibold mb-3 text-primary">Обновить пароль</h3>
+                <AppInput class="w-full" id="oldPassword" name="oldPassword" label="Текущий пароль" type="password"
+                  v-model="newPassword.oldPassword" required placeholder="Введите ваш пароль от аккаунта" />
+                <AppInput class="w-full" id="newPassword" name="newPassword" label="Новый пароль" type="password"
+                  v-model="newPassword.newPassword" required placeholder="Введите новый пароль" />
+                <button @click="updatePassword" class="btn btn-primary btn-mini btn-update mt-3">Обновить
+                  пароль</button>
+
+                <!-- Модальные окна -->
+                <ModalSuccess
+                @update:isVisible="closeModal"
+                :isVisible="showSuccessModal"
+                :message="userStore.message"
+                @close="showSuccessModal = false"
+              />
+                <!-- <ErrorModal :isVisible="showErrorModal" :message="errorMessage" @close="showErrorModal = false" /> -->
               </div>
             </div>
           </div>
@@ -126,8 +146,14 @@ const avatar = ref<File | null>(null)
 
 const newEmail = ref({
   email: '',
-  password: ''  
+  password: ''
 })
+
+const newPassword = ref({
+  newPassword: '',
+  oldPassword: ''
+})
+
 
 const storage = useStorage();
 
@@ -136,21 +162,39 @@ const activeTab = ref('profile');
 const userStore = useUserStore();
 const authStore = useAuthStore();
 
+const showSuccessModal = ref<boolean | null>(false);
+
 const uploadImage = (e: Event) => {
-    const input = e.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      avatar.value = input.files[0];
-    }
+  const input = e.target as HTMLInputElement;
+  if (input.files && input.files[0]) {
+    avatar.value = input.files[0];
+  }
 };
 
-const updateAvatar = async() => {
-  if(avatar.value) {
+const updateAvatar = async () => {
+  if (avatar.value) {
     await userStore.uploadUserImage(avatar.value)
   }
 }
 
 const updateEmail = async () => {
   await userStore.changeEmail(newEmail.value.email, newEmail.value.password)
+}
+
+const updatePassword = async () => {
+  await userStore.changePassword(newPassword.value.oldPassword, newPassword.value.newPassword)
+}
+
+watch(() => userStore.message, (newMessage) => {
+  if(newMessage === '' || newMessage === null) {
+    showSuccessModal.value = false;
+  } else {
+    showSuccessModal.value = true;
+  }
+});
+
+const closeModal = () => {
+  showSuccessModal.value = false;
 }
 
 // Классы для активных и неактивных вкладок
@@ -222,7 +266,7 @@ const currentRole = computed(() => {
 })
 
 const email = computed(() => {
-  if(userStore.currentUser.email) {
+  if (userStore.currentUser.email) {
     return userStore.currentUser.email;
   }
   return '';
@@ -233,11 +277,11 @@ const city = computed(() => {
 })
 
 const studyPlace = computed(() => {
-    return userStore.currentUser.study_place === ''? 'Не указано' : userStore.currentUser.study_place;
+  return userStore.currentUser.study_place === '' ? 'Не указано' : userStore.currentUser.study_place;
 })
 
 const summary = computed(() => {
-  if(userStore.currentUser.summary) {
+  if (userStore.currentUser.summary) {
     return userStore.currentUser.summary;
   } else {
     return '<span class="text-primary">Напишите резюме, чтобы получать больше предложений от работодателей. Вы можете написать о своих качествах, навыках, опыте или собственных проектах</span>';
@@ -274,7 +318,7 @@ const age = computed(() => {
 });
 
 const dashboardTitle = computed(() => {
-  if(currentRole.value === 'applicant') {
+  if (currentRole.value === 'applicant') {
     return 'Мои отклики'
   } else {
     return 'Мои вакансии'
@@ -286,25 +330,30 @@ const dashboardTitle = computed(() => {
 .me-2 {
   margin-right: 0.5rem;
 }
+
 .avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
+
 .update-avatar {
   justify-content: flex-start;
 }
+
 .update-avatar::v-deep .image-upload__avatar {
   width: 90px;
   height: 90px;
 }
+
 .update-avatar::v-deep .image-upload__caption {
   font-family: sans-serif;
   font-size: 14px;
 }
+
 .btn-update {
   font-size: 14px;
   line-height: 16px;
- 
+
 }
 </style>

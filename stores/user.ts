@@ -15,6 +15,7 @@ export const useUserStore = defineStore('user', () => {
     const currentUser = ref<any>(null);
     const loading = ref(false);
     const error = ref<string | null>(null);
+    const message = ref<string | null>(null);
 
     async function fetchUsers({
         page,
@@ -84,7 +85,8 @@ export const useUserStore = defineStore('user', () => {
 
     async function uploadUserImage(file: File) {
         loading.value = true;
-        error.value = true;
+        error.value = null;
+        message.value = null;
         try {
             const api = useApi();
             const formData = new FormData();
@@ -93,10 +95,10 @@ export const useUserStore = defineStore('user', () => {
             if(image) {
                 await fetchCurrentUser()
             }
-            
+            message.value = 'Изображение успешно обновлено'
             
         } catch (err) {
-            error.value = 'Failed to upload user image';
+            error.value = 'Не удалось загрузить изображение';
             console.error('Error uploading user image', err);
         } finally {
             loading.value = false;
@@ -104,24 +106,38 @@ export const useUserStore = defineStore('user', () => {
     }
 
     async function changePassword(previous_password: string, new_password: string) {
+        loading.value = true;
+        error.value = null;
+        message.value = null;
         try {
             const api = useApi();
             const user = await api.user.changePassword(previous_password, new_password);
             await fetchCurrentUser()
+            message.value = 'Пароль успешно обновлен'
             console.log('Password changed successfully:', user);
-        } catch (error) {
-            console.error('Error changing password:', error);
+        } catch (err) {
+            error.value = 'Ошибка обновления пароля. Попробуйте еще раз'
+            console.error('Error changing password:', err);
+        } finally {
+            loading.value = false;
         }
     }
 
     async function changeEmail(email: string, password: string) {
+        loading.value = true;
+        error.value = null;
+        message.value = null;
         try {
             const api = useApi();
             const user = await api.user.changeEmail(email, password);
             await fetchCurrentUser()
+            message.value = "E-mail успешно обновлен"
             console.log('Email changed successfully:', user);
-        } catch (error) {
-            console.error('Error changing email:', error);
+        } catch (err) {
+            console.error('Error changing email:', err);
+            error.value = "Ошибка при обновлении e-mail. Попробуйте еще раз"
+        } finally {
+            loading.value = false;
         }
     }
 
@@ -175,7 +191,8 @@ export const useUserStore = defineStore('user', () => {
         changeEmail,
         banUser,
         unbanUser,
-        deleteUser
+        deleteUser,
+        message
     };
 }, {
     persist: process.client ? {
