@@ -72,7 +72,20 @@ export const useUserStore = defineStore('user', () => {
         error.value = null;
         try {
             const api = useApi();
-            const user = await api.user.getUserById(uuid);
+            let user = await api.user.getUserById(uuid);
+            let userRoles = await roleStore.getRolesByUserUuid(user.uuid)
+            let userData;
+            if(user.role.current === 'individual') {
+                userData = await roleStore.getIndividualByUuid(userRoles.individual.uuid);
+            }
+            if(user.role.current === 'legal_entity') {
+                userData = await roleStore.getLegalEntityByUuid(userRoles.legal_entity.uuid);
+            }
+            if(user.role.current === 'applicant') {
+                userData = await roleStore.getApplicantByUuid(userRoles.applicant.uuid);
+            }
+            
+            user = { ...user, ...userData }
             return user; // Возвращаем пользователя, не сохраняем в store
         } catch (err) {
             error.value = 'Failed to fetch user by ID';

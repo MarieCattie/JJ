@@ -34,7 +34,6 @@ export const useChatStore = defineStore('chat', () => {
     const userStore = useUserStore();
     const authStore = useAuthStore();
 
-    // Инициализация Socket.IO
     function initializeSocket(companionUuid: string) {
         const token = authStore.token;
         if (token && !socket.value) {
@@ -61,6 +60,14 @@ export const useChatStore = defineStore('chat', () => {
                 console.log(`Disconnected: ${reason}`);
             });
         } 
+    }
+
+    function disconnectSocket() {
+        if (socket.value) {
+            socket.value.disconnect();
+            socket.value = null;
+            console.log("Socket disconnected");
+        }
     }
 
     async function fetchChats() {
@@ -92,6 +99,12 @@ export const useChatStore = defineStore('chat', () => {
         } finally {
             loading.value = false;
         }
+    }
+
+    async function sendMessageShort(content: string) {
+        loading.value = true
+        await socket.value.emit("message", {body: content})
+        loading.value = false;
     }
 
     async function sendMessage(content: string) {
@@ -166,7 +179,7 @@ export const useChatStore = defineStore('chat', () => {
     }
 
     function scrollToBottom() {
-        // Ваш метод прокрутки до последнего сообщения
+        // метод прокрутки до последнего сообщения
     }
 
     return {
@@ -182,6 +195,9 @@ export const useChatStore = defineStore('chat', () => {
         fetchAllMessages, // новый метод для получения всех сообщений
         deleteMessage, // новый метод для удаления сообщения
         markMessageAsRead,
+        disconnectSocket,
+        socket,
+        sendMessageShort
     };
 }, {
     persist: process.client ? {

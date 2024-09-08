@@ -4,6 +4,7 @@ import { useApi } from "~/composables/api";
 import { VacancyResponse, CreateVacancyResponseData } from '@/api/vacancy_responses';
 import { useUserStore } from "@/stores/user";
 
+
 export const useVacancyResponsesStore  = defineStore('vacancy_responses', () => {
     const loading = ref(false);
     const error = ref<string | null>(null);
@@ -31,21 +32,40 @@ export const useVacancyResponsesStore  = defineStore('vacancy_responses', () => 
         }
     };
 
-    async function getResponsesByApplicant (uuid: string) {
+    async function fetchResponsesByApplicant (uuid: string) {
         const api = useApi();
-        try {
-            loading.value = true;
-            error.value = null;
-            const responses = await api.vacancy_responses.getResponsesByApplicant(uuid);
-            applicantResponses.value = responses;
-            return responses;
-        } catch (err) {
-            error.value = 'Ошибка при получении откликов соискателя';
-            console.error("Ошибка при получении откликов соискателя:", err);
-            throw err;
-        } finally {
-            loading.value = false;
-        }
+    const userStore = useUserStore();  // Предположим, что у вас есть доступ к userStore через useUserStore
+    try {
+        loading.value = true;
+        error.value = null;
+
+        // Получаем отклики
+        const responses = await api.vacancy_responses.getResponsesByApplicant(uuid);
+
+        // Проходимся по каждому отклику и добавляем информацию о работодателе
+        const responsesWithEmployerData = await Promise.all(
+            responses.map(async (response: any) => {
+                const employerId = response.vacancy.employer.uuid;
+                try {
+                    const employerData = await userStore.getUserById(employerId);  // Получаем данные работодателя
+                    response.employer = employerData;  // Добавляем данные работодателя в отклик
+                } catch (err) {
+                    console.error(`Ошибка при получении данных работодателя с ID ${employerId}:`, err);
+                    response.employer = null;  // На случай ошибки
+                }
+                return response;
+            })
+        );
+
+        applicantResponses.value = responsesWithEmployerData;  // Сохраняем отклики с данными работодателей
+        return responsesWithEmployerData;
+    } catch (err) {
+        error.value = 'Ошибка при получении откликов соискателя';
+        console.error("Ошибка при получении откликов соискателя:", err);
+        throw err;
+    } finally {
+        loading.value = false;
+    }
     };
 
     async function getResponsesByEmployer (uuid: string) {
@@ -128,7 +148,7 @@ export const useVacancyResponsesStore  = defineStore('vacancy_responses', () => 
 
     return {
         createVacancyResponse,
-        getResponsesByApplicant,
+        fetchResponsesByApplicant,
         getResponsesByEmployer,
         getResponsesByVacancy,
         getResponseById,

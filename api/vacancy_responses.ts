@@ -1,10 +1,5 @@
 import { AxiosInstance } from "axios";
 
-export interface CreateVacancyResponseData {
-    uuid: string;
-    message: string;
-}
-
 export interface VacancyResponse {
     uuid: string;
     vacancy: string;
@@ -13,6 +8,11 @@ export interface VacancyResponse {
     created_at: string;
     updated_at: string;
     deleted: boolean;
+}
+
+export interface CreateVacancyResponseData {
+    uuid: string;
+    message: string;
 }
 
 export default ($apiClient: AxiosInstance) => ({

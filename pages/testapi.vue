@@ -31,7 +31,7 @@
     </div>
     <h2 style="font-size: 20px;font-weight:bold;">GET /users/{uuid}</h2>
     <div class="wrapper">
-      <button @click="userStore.getUserById('0af64411-ab92-4641-afcc-fcb40f8e9119')">GetById "0af64411-ab92-4641-afcc-fcb40f8e9119" (которого баним и разбаним)</button>
+      <button @click="userStore.getUserById('2c9f1aea-23d0-4587-ab1b-1f7da5fcd6e7')">GetById "2c9f1aea-23d0-4587-ab1b-1f7da5fcd6e7" </button>
     </div>
     <h2 style="font-size: 20px;font-weight:bold;">POST /users/uploadImage</h2>
     <div class="wrapper">
@@ -105,6 +105,9 @@
     <button @click="professionalTrialCategoriesStore.fetchCategories()">Fetch All</button>
 
     <button @click="chatStore.fetchChats()">fetch chats</button>
+
+    <h2 style="font-size: 20px;font-weight:bold;">Fetch all messages</h2>
+    <button @click="chatStore.fetchAllMessages()">fetch all messages</button>
   </div>
 </template>
 

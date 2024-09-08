@@ -88,7 +88,9 @@
               </template>
             </div>
             <div v-if="activeTab === 'dashboard'">
-              <p>Эта вкладка в разработке</p>
+              <template v-if="currentRole === 'applicant'">
+                <VacancyResponseCard v-for="response in vacancyResponsesStore.applicantResponses" :key="response.uuid" :response="response" />
+              </template>
             </div>
             <div v-if="activeTab === 'settings'">
               <div class="pb-6 w-full border-b border-gray-300">
@@ -138,11 +140,14 @@ import { ref } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 import { useUserStore } from '~/stores/user';
 import useStorage from '~/composables/useStorage';
+import { useVacancyResponsesStore } from '~/stores/vacancy_responses';
+import VacancyResponseCard from '~/components/Cards/VacancyResponseCard.vue';
 
 const loading = ref(true);
 const error = ref(null);
 
 const avatar = ref<File | null>(null)
+
 
 const newEmail = ref({
   email: '',
@@ -161,6 +166,7 @@ const activeTab = ref('profile');
 
 const userStore = useUserStore();
 const authStore = useAuthStore();
+const vacancyResponsesStore = useVacancyResponsesStore();
 
 const showSuccessModal = ref<boolean | null>(false);
 
@@ -215,9 +221,11 @@ onMounted(async () => {
 
     //Пример запроса, для которого нужна авторизация
     // const response = await $apiClient.get('/roles/my');
+    if(currentRole.value === 'applicant') {
+      await vacancyResponsesStore.fetchResponsesByApplicant(userStore.currentUser.user_uuid)
+    }
 
-
-  } catch (err) {
+  } catch (err: any) {
     error.value = err.message;
   } finally {
     loading.value = false;

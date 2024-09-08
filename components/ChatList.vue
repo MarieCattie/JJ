@@ -53,7 +53,7 @@
   const companionUuid = isCurrentUserFirst ? chat.second_user : chat.first_user;
 
   // Передаем uuid чата в initializeSocket
-  
+    chatStore.disconnectSocket();
     chatStore.initializeSocket(companionUuid);
   }
   </script>

@@ -5,7 +5,12 @@
         <li
           v-for="message in chatStore.messages"
           :key="message.uuid"
-          :class="{'my-message': isMyMessage(message), 'companion-message': !isMyMessage(message)}"
+          :class="{
+            'my-message': isMyMessage(message),
+            'companion-message': !isMyMessage(message),
+            'flex justify-end': isMyMessage(message),
+            'flex justify-start': !isMyMessage(message)
+          }"
         >
           <span class="message-content">{{ message.content }}</span>
         </li>
@@ -50,7 +55,7 @@
   
   // Определение, является ли сообщение отправленным текущим пользователем
   function isMyMessage(message) {
-    return message.user === userStore.currentUser.uuid;
+    return message.user === userStore.currentUser.user_uuid;
   }
   
   // Watch для отслеживания изменений в списке сообщений
@@ -96,22 +101,28 @@
     margin-bottom: 10px;
     padding: 10px;
     border-radius: 10px;
-    max-width: 60%;
+    max-width: 100%;
+    display: flex;
   }
+
+  /* Сообщения текущего пользователя */
+.my-message .message-content {
+  padding: 8px 15px;
+  background-color: #8a2be2; /* Фиолетовый фон */
+  color: white;
+  border-radius: 10px 10px 0 10px;
+  text-align: right;
+}
+
+/* Сообщения собеседника */
+.companion-message .message-content {
+  padding: 8px 15px;
+  background-color: #f1f1f1; /* Светло-серый фон */
+  color: black;
+  border-radius: 10px 10px 10px 0;
+  text-align: left;
+}
   
-  .my-message {
-    background-color: #8a2be2; /* Фиолетовый фон */
-    color: white;
-    align-self: flex-end;
-    text-align: right;
-  }
-  
-  .companion-message {
-    background-color: #f1f1f1; /* Светло-серый фон */
-    color: black;
-    align-self: flex-start;
-    text-align: left;
-  }
   
   .message-input {
     border: 1px solid #ccc;
