@@ -108,12 +108,14 @@ export const useChatStore = defineStore('chat', () => {
     }
 
     async function sendMessage(content: string) {
-        if (!currentChat.value || !socket.value) return;
+        if (!currentChat.value || !socket.value) {
+            console.log("sendMessages - ошибка")
+        }
 
         const newMessage = {
             content,
             chat: currentChat.value.uuid,
-            user: userStore.currentUser.uuid,
+            user: userStore.currentUser.user_uuid,
             created_at: new Date().toISOString(),
             read: false,
         };
@@ -125,7 +127,7 @@ export const useChatStore = defineStore('chat', () => {
         messages.value.push({
             uuid: new Date().getTime().toString(), // Временный UUID до получения от сервера
             content,
-            user: userStore.currentUser.uuid,
+            user: userStore.currentUser.user_uuid,
             chat: currentChat.value.uuid,
             created_at: new Date().toISOString(),
             read: false,

@@ -12,14 +12,15 @@
         <h3 class="text-xl font-bold text-center mb-4">Сообщение отправлено</h3>
         
         <!-- Текст под заголовком -->
-        <p class="text-center text-gray-700">Вы можете <NuxtLink to="/chat" class="text-primary text-bold font-weight-bold">перейти в чат</NuxtLink>.</p>
+        <p class="text-center text-gray-700">Вы можете <NuxtLink :to="`/chat?uuid=${companion}`" class="text-primary text-bold font-weight-bold">перейти в чат</NuxtLink>.</p>
       </div>
     </div>
   </template>
   
   <script setup lang="ts">
   const props = defineProps({
-    isVisible: Boolean
+    isVisible: Boolean,
+    companion: String
   });
   
   const emit = defineEmits(['update:isVisible']);

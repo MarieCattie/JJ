@@ -89,7 +89,7 @@
             </div>
             <div v-if="activeTab === 'dashboard'">
               <template v-if="currentRole === 'applicant'">
-                <VacancyResponseCard v-for="response in vacancyResponsesStore.applicantResponses" :key="response.uuid" :response="response" />
+                <VacancyResponseCard v-for="response in vacancyResponsesStore.applicantResponses" :key="response.uuid" :response="response" @deleteResponse="deleteResponse" />
               </template>
             </div>
             <div v-if="activeTab === 'settings'">
@@ -136,7 +136,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, defineEmits } from 'vue';
 import { useAuthStore } from '~/stores/auth';
 import { useUserStore } from '~/stores/user';
 import useStorage from '~/composables/useStorage';
@@ -148,6 +148,7 @@ const error = ref(null);
 
 const avatar = ref<File | null>(null)
 
+  
 
 const newEmail = ref({
   email: '',
@@ -232,6 +233,12 @@ onMounted(async () => {
   }
 });
 
+const deleteResponse = (async(data: any) => {
+  await vacancyResponsesStore.deleteResponse(data.uuid);
+  await vacancyResponsesStore.fetchResponsesByApplicant(userStore.currentUser.user_uuid)
+  
+})
+
 const name = computed(() => {
   if (userStore.currentUser.name) {
     if (userStore.currentUser.surname) {
@@ -246,6 +253,7 @@ const name = computed(() => {
     return `Пользователь ${userStore.currentUser.email}`
   }
 });
+
 
 const role = computed(() => {
   switch (userStore.currentUser.role.current) {

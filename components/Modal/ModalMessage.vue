@@ -95,10 +95,10 @@ const sendMessage = () => {
                 console.log('Socket connected');
                 // Отправляем сообщение только после успешного подключения
                 if(chatStore.socket) {
-                    alert(567)
+                    
                     chatStore.sendMessage(message.value);
                 } else {
-                    alert(123)
+                    
                 }
                 
                  // Очищаем поле после отправки
@@ -112,7 +112,7 @@ const sendMessage = () => {
                 emit('sendMessage', { status: "failed" });
             });
         } else {
-            alert(666)
+            
             // Если сокет уже есть, сразу отправляем сообщение
             chatStore.sendMessage(message.value);
             // Очищаем поле после отправки

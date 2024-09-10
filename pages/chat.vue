@@ -2,7 +2,7 @@
     <div class="chat-container">
       <div class="chat-list">
         <!-- Компонент для списка чатов -->
-        <ChatList @chatSelected="handleChatSelected" />
+        <ChatList @chatSelected="handleChatSelected" class="mx-2" />
       </div>
       <div class="chat-window">
         <!-- Компонент для текущего чата -->

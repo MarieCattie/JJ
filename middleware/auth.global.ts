@@ -7,7 +7,7 @@ export default defineNuxtRouteMiddleware(async (to, from, next) => {
     const router = useRouter();
     const { token, refreshToken, isAuthenticated } = storeToRefs(authStore);
 
-    const restrictedPages = ['/profile', '/settings1', '/user1/', '/test1'];
+    const restrictedPages = ['/profile', '/chat/', '/settings1', '/user1/', '/test1'];
     const restrictedPagesForAuthorized = ['/login', '/register/'];
 
     const isRestrictedPage = restrictedPages.some((page) => to.path.startsWith(page));

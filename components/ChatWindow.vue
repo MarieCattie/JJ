@@ -3,7 +3,7 @@
     <div v-else class="chat-window-content">
       <ul class="message-list" ref="messageList">
         <li
-          v-for="message in chatStore.messages"
+          v-for="message in sortedMessages"
           :key="message.uuid"
           :class="{
             'my-message': isMyMessage(message),
@@ -12,7 +12,7 @@
             'flex justify-start': !isMyMessage(message)
           }"
         >
-          <span class="message-content">{{ message.content }}</span>
+          <p class="message-content d-flex justify-content-end flex-column"><span>{{ message.content }}</span><span class="message-time">{{ formatter.formatMessageTime(message.created_at) }}</span></p>
         </li>
       </ul>
       <input
@@ -29,6 +29,9 @@
   import { useChatStore } from '~/stores/chat';
   import { useUserStore } from '~/stores/user';
   import { useAuthStore } from '~/stores/auth';
+  import useFormatter from '~/composables/useFormatter';
+
+  const formatter = useFormatter();
   
   const props = defineProps({
     chat: Object, // Текущий выбранный чат
@@ -52,11 +55,17 @@
       chatStore.fetchMessages(props.chat.uuid)
     }
   }
+
+  const sortedMessages = computed(() => {
+  return [...messages].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+});
   
   // Определение, является ли сообщение отправленным текущим пользователем
   function isMyMessage(message) {
     return message.user === userStore.currentUser.user_uuid;
   }
+
+
   
   // Watch для отслеживания изменений в списке сообщений
   watch(chatStore.messages, (newMessages) => {
@@ -114,6 +123,13 @@
   text-align: right;
 }
 
+.my-message .message-time {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: right;
+  margin-top: 5px;
+}
+
 /* Сообщения собеседника */
 .companion-message .message-content {
   padding: 8px 15px;
@@ -121,6 +137,13 @@
   color: black;
   border-radius: 10px 10px 10px 0;
   text-align: left;
+}
+
+.companion-message .message-time {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.5);
+  text-align: left;
+  margin-top: 5px;
 }
   
   

@@ -30,7 +30,7 @@
             <button class="bg-purplefresh text-white px-4 py-2 rounded-lg hover:bg-purplelight" @click="openChat">
                 Написать в чат
             </button>
-            <button class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600" @click="deleteApplication">
+            <button class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600" @click="deleteApplication(response.uuid)">
                 Удалить отклик
             </button>
             <ModalMessage
@@ -41,6 +41,7 @@
       @sendMessage="handleSendMessage"
     />
     <ModalMessageSuccess 
+    :companion="response.employer.user_uuid"
     :isVisible="isModalMessageSuccessVisible" 
     @update:isVisible="isModalMessageSuccessVisible = $event" 
   />
@@ -49,10 +50,11 @@
 </template>
 
 <script setup lang="ts">
+import { ref, defineEmits } from 'vue';
 import type { VacancyResponse } from '~/api/vacancy_responses';
 import { useChatStore } from '~/stores/chat';
 
-
+const emit = defineEmits(['deleteResponse']);
 const props = defineProps<{
     response: VacancyResponse[] | [] | null;
     jobTitle: string;
@@ -105,8 +107,9 @@ const openChat = () => {
     isModalVisible.value = true;
 };
 
-const deleteApplication = () => {
+const deleteApplication = (uuid:string) => {
     console.log('Удалить отклик');
+    emit('deleteResponse', {uuid: uuid});
 };
 const isModalVisible = ref(false);
 const isModalMessageSuccessVisible = ref(false);
