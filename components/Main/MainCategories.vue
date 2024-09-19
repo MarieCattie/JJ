@@ -3,7 +3,7 @@
         <NuxtLink 
       v-for="category in categoriesStore.categories" 
       :key="category.uuid" 
-      class="main-categories__item"
+      class="main-categories__item" :to="`/categories/${ formatter.transliterate(category.title).toLowerCase()}`"
     >
       <div class="main-categories__item-img">
         <img :src="storage.showCategoryImage(category.image)" alt="Category Image" class="category-image" />
@@ -17,10 +17,11 @@
 import { onMounted } from 'vue';
 import { useCategoriesStore } from '~/stores/categories';
 import useStorage from '~/composables/useStorage';
+import useFormatter from '~/composables/useFormatter';
 
 const categoriesStore = useCategoriesStore();
 const storage = useStorage();
-
+const formatter = useFormatter();
 // Загрузка категорий при монтировании компонента
 onMounted(() => {
   categoriesStore.fetchCategories();
