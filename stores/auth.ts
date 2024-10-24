@@ -18,6 +18,8 @@ export const useAuthStore = defineStore('auth', () => {
 
   const isEmployer = computed(() => token.value !== null && (userStore.currentUser.role.current === 'individual' || userStore.currentUser.role.current === 'legal_entity'));
 
+  const isAdmin = computed(() => token.value !== null && (userStore.currentUser.role.current === 'moderator'));
+
   async function refresh() {
     try {
       const api = useApi()
@@ -114,6 +116,7 @@ export const useAuthStore = defineStore('auth', () => {
     isAuthenticated,
     isApplicant,
     isEmployer,
+    isAdmin,
     errorMessage
   }
 }, {

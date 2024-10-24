@@ -62,3 +62,22 @@
     line-height: 20px;
 }
 
+.admin-block {
+    @apply w-full sm:w-[calc(50%-10px)] p-5 bg-purple-100 border-2 border-[#3d337e] rounded-lg;
+  }
+  
+  .admin-title {
+    @apply text-2xl font-semibold mb-2;
+  }
+  
+  .admin-subtitle {
+    @apply text-base;
+  }
+
+  .btn-delete {
+    @apply bg-red-500 p-2 rounded-lg;
+  }
+  
+  .article-card {
+    @apply border border-gray-300 rounded-lg shadow-sm overflow-hidden;
+  }

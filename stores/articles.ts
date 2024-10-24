@@ -18,6 +18,7 @@ export const useArticlesStore = defineStore('articles', () => {
             if (previewFile) {
                 const previewData = new FormData();
                 previewData.append('image', previewFile);
+                previewData.append('uuid', newArticle.uuid);
                 const updatedArticleWithPreview = await api.articles.uploadArticlePreview(newArticle.uuid, previewData);
                 newArticle.preview = updatedArticleWithPreview.preview;
             }
@@ -51,6 +52,7 @@ export const useArticlesStore = defineStore('articles', () => {
             if (previewFile) {
                 const previewData = new FormData();
                 previewData.append('image', previewFile);
+                previewData.append('uuid', updatedArticle.uuid);
                 const updatedArticleWithPreview = await api.articles.uploadArticlePreview(updatedArticle.uuid, previewData);
                 updatedArticle.preview = updatedArticleWithPreview.preview;
             }
@@ -112,10 +114,7 @@ export const useArticlesStore = defineStore('articles', () => {
     }
 
     async function getArticleByUuid(articleUuid: string): Promise<Article | undefined> {
-        const existingArticle = articles.value.find(article => article.uuid === articleUuid);
-        if (existingArticle) {
-            return existingArticle;
-        } else {
+       
             loading.value = true;
             error.value = null;
             try {
@@ -130,7 +129,7 @@ export const useArticlesStore = defineStore('articles', () => {
             } finally {
                 loading.value = false;
             }
-        }
+        
     }
 
 

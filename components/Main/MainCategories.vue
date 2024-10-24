@@ -3,7 +3,7 @@
         <NuxtLink 
       v-for="category in categoriesStore.categories" 
       :key="category.uuid" 
-      class="main-categories__item" :to="`/categories/${ formatter.transliterate(category.title).toLowerCase()}`"
+      class="main-categories__item" :to="`/categories/${ category.uuid}`"
     >
       <div class="main-categories__item-img">
         <img :src="storage.showCategoryImage(category.image)" alt="Category Image" class="category-image" />

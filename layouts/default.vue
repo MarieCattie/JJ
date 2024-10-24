@@ -10,14 +10,17 @@
           <v-img src="@/assets/images/logo.svg" contain width="187"></v-img></NuxtLink>
           <!-- Меню с отступом -->
           <div class="d-none d-md-flex ml-8">
-
-            <v-btn variant="plain" color="primary" v-for="(item, i) in items" :key="i" :to="item.to"
+            <template v-for="(item, i) in items">
+              <v-btn variant="plain" color="primary"  v-if="(item.role === 'moderator' && userStore?.currentUser?.role?.current === 'moderator') || item.role === 'all'" :key="i" :to="item.to"
               class="header-link ml-4 custom-reset">
-              <div class="d-flex gap-2">
-                <v-img :src="item.icon" contain width="20"></v-img>
-                <span>{{ item.title }}</span>
+              <div class="d-flex gap-2" >
+                <v-img v-if="item.icon" :src="item.icon" contain width="20"></v-img>
+                <span :class="{ 'font-bold': item.role === 'moderator'}">{{ item.title }}</span>
               </div>
             </v-btn>
+            </template>
+           
+          
           </div>
         
 
@@ -194,10 +197,10 @@ const authStore = useAuthStore();
 const userStore = useUserStore();
 
 const items = [
-  { title: 'Вакансии', to: '/vacancies', icon: workIcon },
-  { title: 'Профессиональные пробы', to: '/profession', icon: badgeIcon },
-  { title: 'Статьи', to: '/articles', icon: noteIcon },
-  { title: 'Настройки', to: '/settings', icon: settingsIcon }
+  { title: 'Вакансии', to: '/vacancies', icon: workIcon, role: 'all' },
+  { title: 'Профессиональные пробы', to: '/profession', icon: badgeIcon,role: 'all' },
+  { title: 'Статьи', to: '/articles', icon: noteIcon,role: 'all' },
+  { title: 'Панель управления', to: '/admin', icon: null,  role: 'moderator' },
 ];
 
 const goToSignUp = () => router.push('/register');

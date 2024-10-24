@@ -52,7 +52,7 @@ export const useVacanciesStore = defineStore('vacancies', () => {
             const api = useApi();
             const updatedVacancy = await api.vacancies.updateVacancy(vacancyData);
             if (image) {
-                await api.vacancies.uploadVacancyImage({ uuid: updatedVacancy.uuid, image });
+                await api.vacancies.uploadVacancyImage({ uuid: updatedVacancy.uuid, image: image });
             }
             await fetchVacancies();
             return updatedVacancy;
@@ -173,6 +173,22 @@ export const useVacanciesStore = defineStore('vacancies', () => {
         }
     }
 
+    async function fetchVacanciesByCategory(categoryUuid: string) {
+        loading.value = true;
+        error.value = null;
+        try {
+            const api = useApi();
+            const data = await api.vacancies.getAllVacancies();
+            // Фильтруем вакансии по category.uuid
+            return data.filter(vacancy => vacancy.category.uuid === categoryUuid);
+        } catch (err) {
+            error.value = 'Failed to fetch vacancies by category';
+            console.error('Error fetching vacancies by category', err);
+        } finally {
+            loading.value = false;
+        }
+    }
+
     return {
         vacancies,
         loading,
@@ -187,7 +203,8 @@ export const useVacanciesStore = defineStore('vacancies', () => {
         fetchCurrentUserVacancies,
         getVacancyById,
         updateVacancy,
-        searchVacanciesArr
+        searchVacanciesArr,
+        fetchVacanciesByCategory
     };
 }, {
     persist: {
