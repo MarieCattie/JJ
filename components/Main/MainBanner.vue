@@ -1,21 +1,21 @@
 <template>
-  <div class="relative isolate px-6 pt-14 lg:px-8">
+  <div class="relative isolate px-2 pt-14 sm:px-8">
       <div class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
           aria-hidden="true">
           <div class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
               style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)" />
       </div>
-      <div class="mx-auto max-w-6xl py-10 md:py-32">
+      <div class="mx-auto max-w-6xl py-5 sm:py-32">
           <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
               <!-- Основной контент -->
               <div class="col-span-6">
                   <div class="text-left md:text-left">
-                      <h1 class="text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl">Хотите работать, но не знаете, куда устроиться?</h1>
-                      <h2 class="text-4xl mt-6 font-semibold tracking-tight text-[#7152D7] sm:text-4xl">Мы поможем!</h2>
+                      <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">Хотите работать, но не знаете, куда устроиться?</h1>
+                      <h2 class="text-2xl mt-6 font-semibold tracking-tight text-[#7152D7] sm:text-4xl">Мы поможем!</h2>
                       <p class="d-none mt-6 text-lg leading-8 text-gray-600">Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat fugiat aliqua.</p>
 
                       <!-- Форма поиска -->
-                      <form @submit.prevent="handleSubmit" class="mt-6 flex max-w-full gap-x-4">
+                      <form @submit.prevent="handleSubmit" class="mt-6 flex max-w-full gap-x-2 sm:gap-x-4">
                           <label for="main-search" class="sr-only">Найти вакансию</label>
                           <input @input="formError = null" v-model="searchParams.query" id="main-search" name="search" type="text" class="min-w-0 flex-auto rounded-md bg-white/5 px-3.5 py-2 text-black shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 outline-none border-solid border border-slate-300" placeholder="Вакансия, должность">
                           <button type="submit" class="flex-none rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm bg-[#AAA2D8] hover:bg-indigo-400">Найти</button>

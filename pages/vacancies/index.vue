@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1 class="text-3xl font-bold text-[#3d337e] mb-10 mt-6">Вакансии</h1>
+        <h1 class="text-3xl font-bold text-[#000] mb-3 mt-5 sm:mb-10 sm:mt-6">Вакансии</h1>
         <MainCategories class="mb-10" />
     </div>
 </template>

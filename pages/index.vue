@@ -10,9 +10,9 @@
       Вы можете выбрать удобный график и условия работы, которые подойдут именно вам
     </p>
     <MainCategories />
-    <h2 class="main-title-2 mt-15 mb-12">Как найти работу на нашем сайте</h2>
+    <h2 class="main-title-2 mt-5 mb-3 sm:mt-15 sm:mb-12">Как найти работу на нашем сайте</h2>
     <MainAdvantages />
-    <h2 class="main-title-2 mt-15 mb-6">Новые вакансии</h2>
+    <h2 class="main-title-2 mt-5 mb-3 sm:mt-15 sm:mb-6">Новые вакансии</h2>
     <MainVacancies class="mb-16" />
     </template>
     
@@ -75,6 +75,9 @@ const testMiddleware = async() => {
   line-height: 122%;
   @media screen and (max-width: 960px) {
     font-size: 24px;
+  }
+  @media screen and (max-width: 400px) {
+    font-size: 16px;
   }
 }
 

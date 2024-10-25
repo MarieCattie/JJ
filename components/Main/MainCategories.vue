@@ -64,5 +64,8 @@ onMounted(() => {
       width: 100%;
      }
     }
+    @media screen and (max-width: 520px) {
+      gap: 8px;
+     }
 }
 </style>

@@ -2,7 +2,7 @@
   <div class="container mx-auto p-4">
     <div v-if="vacancy" class="bg-white shadow-lg rounded-lg p-6 mb-8">
       <!-- Изображение вакансии -->
-      <img :src="`/storage/vacancies/${vacancy.image}`" alt="vacancy image" class="w-full h-64 object-cover rounded-lg mb-4">
+      <img v-if="vacancy.image !== 'image.png'" :src="`${storage.showVacancyImage(vacancy.image)}`" alt="vacancy image" class="w-full h-64 object-cover rounded-lg mb-4">
       
       <!-- Название вакансии и работодатель -->
       <h1 class="text-3xl font-bold text-[#3d337e] mb-2">{{ vacancy.title }}</h1>
@@ -23,8 +23,8 @@
       </div>
 
       <!-- Действия: Откликнуться и Чат -->
-      <div v-if="!hasResponded" class="space-x-4 mb-6">
-        <v-btn color="primary" @click="applyToVacancy" class="w-full md:w-auto">
+      <div v-if="!hasResponded" class=" mb-6 flex gap-2 flex-col sm:flex-row">
+        <v-btn color="primary" @click="openResponceModal" class="w-full md:w-auto">
           Откликнуться на вакансию
         </v-btn>
         <v-btn @click="openChat" color="secondary" class="w-full md:w-auto">
@@ -42,6 +42,18 @@
     :isVisible="isModalMessageSuccessVisible" 
     @update:isVisible="isModalMessageSuccessVisible = $event" 
   />
+
+
+  <ModalResponce
+  :isVisible="isModalResponseVisible"
+  :vacancy="vacancy"
+  @update:isVisible="isModalResponseVisible = $event"
+  @sendMessage="handleSendResponse"
+/>
+<ModalResponceSuccess 
+:isVisible="isModalResponceSuccessVisible" 
+@update:isVisible="isModalResponceSuccessVisible = $event" 
+/>
       </div>
 
       <!-- Сообщение об отклике -->
@@ -50,7 +62,7 @@
       </div>
       
       <!-- Отмена отклика -->
-      <v-btn v-if="hasResponded" color="error" @click="deleteResponse" class="mt-4">
+      <v-btn v-if="hasResponded" color="error" @click="deleteResponse(vacancy.uuid)" class="mt-4">
         Отменить отклик
       </v-btn>
     </div>
@@ -64,6 +76,7 @@ import { useVacanciesStore } from '~/stores/vacancies';
 import { useVacancyResponsesStore } from '~/stores/vacancy_responses';
 import { useUserStore } from '~/stores/user';
 import { useChatStore } from '~/stores/chat';
+import useStorage from '~/composables/useStorage';
 
 const route = useRoute();
 const vacanciesStore = useVacanciesStore();
@@ -72,13 +85,20 @@ const userStore = useUserStore();
 const chatStore = useChatStore();
 const vacancy = ref(null);
 const hasResponded = ref(false);
+const storage = useStorage();
 
 const isModalVisible = ref(false);
 const isModalMessageSuccessVisible = ref(false);
+const isModalResponseVisible = ref(false);
+const isModalResponceSuccessVisible = ref(false);
 
 const openChat = () => {
   isModalVisible.value = true;
 };
+
+const openResponceModal = () => {
+  isModalResponseVisible.value = true;
+}
 
 const handleSendMessage = (data: any) => {
   if (data.status === "success") {
@@ -97,6 +117,13 @@ const handleSendMessage = (data: any) => {
     }, 100);
   }
 };
+
+const handleSendResponse = (data: any) => {
+  let vacancyUuid = data.uuid;
+  let message = data.message;
+  isModalResponceSuccessVisible.value = true;
+  applyToVacancy(vacancyUuid, message)
+}
 
 // Получение вакансии
 const fetchVacancy = async () => {
@@ -133,15 +160,13 @@ const getEmployerName = (employer) => {
 };
 
 // Отклик на вакансию
-const applyToVacancy = async () => {
+const applyToVacancy = async (uuid: string, message:string) => {
   if (!vacancy.value) return;
-
   try {
     await vacancyResponseStore.createVacancyResponse({
-      uuid: vacancy.value.uuid,
-      message: 'Ваше сообщение к вакансии',
+      uuid: uuid,
+      message: message,
     });
-    alert('Вы успешно откликнулись на вакансию');
     hasResponded.value = true;
   } catch (error) {
     console.error('Ошибка при отклике на вакансию:', error);
@@ -150,22 +175,34 @@ const applyToVacancy = async () => {
 };
 
 // Удаление отклика
-const deleteResponse = async () => {
-
-
+// Удаление отклика
+const deleteResponse = async (uuid: string) => {
   try {
-    const responses = await vacancyResponseStore.fetchResponsesByApplicant(userStore.currentUser.uuid);
-    const responseToDelete = responses.find(r => r.vacancy.uuid === vacancy.value.uuid);
+    const responses = await vacancyResponseStore.fetchResponsesByApplicant(userStore.currentUser.user_uuid);
+    const responseToDelete = responses.find(r => r.vacancy.uuid === uuid);
+    
     if (responseToDelete) {
+      // Удалить отклик с сервера
       await vacancyResponseStore.deleteResponse(responseToDelete.uuid);
+      
+      // Удалить отклик из store
+      vacancyResponseStore.applicantResponses = vacancyResponseStore.applicantResponses.filter(r => r.uuid !== responseToDelete.uuid);
+
+      // Обновить локальную переменную responses
+      const index = responses.findIndex(r => r.uuid === responseToDelete.uuid);
+      if (index !== -1) {
+        responses.splice(index, 1);  // Удаление из локального состояния
+      }
+
       alert('Ваш отклик был отменен');
-      hasResponded.value = false;
+      hasResponded.value = false;  // Обновить состояние
     }
   } catch (error) {
     console.error('Ошибка при отмене отклика:', error);
     alert('Произошла ошибка при отмене отклика');
   }
 };
+
 
 onMounted(fetchVacancy);
 </script>

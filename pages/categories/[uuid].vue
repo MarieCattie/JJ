@@ -1,6 +1,6 @@
 <template>
     <div v-if="category">
-      <h1 class="text-3xl font-bold text-[#3d337e] mb-10 mt-6">{{ category.title }}</h1>
+      <h1 class="text-3xl font-bold text-[#000] mb-1 mt-6 sm:mb-1 sm:mt-5">{{ category.title }}</h1>
       <h2 class="text-xl font-medium text-[#3d337e] mb-5">Вакансии в категории:</h2>
   
       <div v-if="loading">

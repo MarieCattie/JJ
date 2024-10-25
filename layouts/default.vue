@@ -115,11 +115,14 @@
     <!-- Мобильное меню -->
     <v-navigation-drawer v-model="drawer" temporary app class="d-md-none px-2">
       <v-list class="d-flex flex-column align-items-start justify-content-between">
-        <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>
-          <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+        <template v-for="(item, i) in items" :key="i">
+          <v-list-item  :to="item.to" router exact v-if="(item.role === 'moderator' && userStore?.currentUser?.role?.current === 'moderator') || item.role === 'all'">
+            <v-list-item-content >
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
+        
         <!-- Кнопки в мобильном меню -->
         <v-list-item @click="goToSignUp" v-if="!authStore.isAuthenticated">
           <v-list-item-content>
