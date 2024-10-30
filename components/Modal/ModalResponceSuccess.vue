@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isVisible" class="fixed inset-0 z-50 flex items-center justify-center overflow-hidden" style="background-color: rgba(0, 0, 0, 0.5);">
+    <div v-if="isVisible" class="fixed inset-0 z-1000 flex items-center justify-center overflow-hidden" style="background-color: rgba(0, 0, 0, 0.5);z-index:10000;">
       <div class="relative bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
         <!-- Кнопка закрытия -->
         <button @click="closeModal" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
