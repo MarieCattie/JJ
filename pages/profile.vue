@@ -91,6 +91,18 @@
               <template v-if="currentRole === 'applicant'">
                 <VacancyResponseCard v-for="response in vacancyResponsesStore.applicantResponses" :key="response.uuid" :response="response" @deleteResponse="deleteResponse" />
               </template>
+              <template v-else>
+                <template v-if="vacanciesStore.currentUserVacancies.length > 0">
+                  <VacancyCard v-for="vacancy in vacanciesStore.currentUserVacancies" :key="vacancy.uuid" :vacancy="vacancy">
+                  </VacancyCard>
+                </template>
+                <template v-else>
+                  <p class="mb-3">Создайте первую вакансию! Соискатели её увидят</p>
+                  <NuxtLink to="/vacancies/create" class="bg-purplefresh text-white px-4 py-2 rounded-lg hover:bg-purplelight">
+                    Создать вакансию
+                </NuxtLink>
+                </template>
+              </template>
             </div>
             <div v-if="activeTab === 'settings'">
               <div class="pb-6 w-full border-b border-gray-300">
@@ -141,7 +153,9 @@ import { useAuthStore } from '~/stores/auth';
 import { useUserStore } from '~/stores/user';
 import useStorage from '~/composables/useStorage';
 import { useVacancyResponsesStore } from '~/stores/vacancy_responses';
+import { useVacanciesStore } from '~/stores/vacancies';
 import VacancyResponseCard from '~/components/Cards/VacancyResponseCard.vue';
+import VacancyCard from '~/components/Cards/VacancyCard.vue';
 
 const loading = ref(true);
 const error = ref(null);
@@ -168,6 +182,7 @@ const activeTab = ref('profile');
 const userStore = useUserStore();
 const authStore = useAuthStore();
 const vacancyResponsesStore = useVacancyResponsesStore();
+const vacanciesStore = useVacanciesStore();
 
 const showSuccessModal = ref<boolean | null>(false);
 
@@ -225,7 +240,9 @@ onMounted(async () => {
     if(currentRole.value === 'applicant') {
       await vacancyResponsesStore.fetchResponsesByApplicant(userStore.currentUser.user_uuid)
     }
-
+    if(currentRole.value === 'legal_entity' || currentRole.value === 'individual') {
+      await vacanciesStore.fetchCurrentUserVacancies();
+    }
   } catch (err: any) {
     error.value = err.message;
   } finally {

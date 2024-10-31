@@ -68,6 +68,13 @@
   watch(selectedValue, (newValue) => {
     emit('update:modelValue', newValue);
   });
+
+  watch(
+  () => props.modelValue,
+  (newValue) => {
+    selectedValue.value = newValue;
+  }
+);
   </script>
   
   <style scoped>
